@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The brief</title>
+<style>body{margin:0;background:#faf7f0;color:#1d2321;font:16px/1.55 -apple-system,system-ui,Segoe UI,Helvetica,Arial,sans-serif}main{max-width:820px;margin:0 auto;padding:48px 24px 80px}h1{font-size:28px;margin:0 0 6px}p.sub{color:#5b6660;margin:0 0 28px}pre{white-space:pre-wrap;background:#fff;border:1px solid #e3ded2;border-radius:10px;padding:24px;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}</style></head>
+<body><main><h1>The brief</h1><p class="sub">The identical prompt sent to every model. Single request, no system prompt, no tools, vendor-default reasoning, no output cap.</p><pre>Build a visually memorable, interactive healthcare website called &quot;Care, in motion.&quot;
+
+The experience follows one fictional patient through a clinic visit. Its centerpiece is a large, custom illustrated clinic that visitors can explore. The audience includes clinicians and people with little technical experience: the experience should be understandable immediately and interesting enough to demonstrate on a large screen.
+
+Deliver one complete, self-contained HTML document with embedded CSS and JavaScript. Return only the HTML, starting with &lt;!DOCTYPE html&gt;, without Markdown fences, commentary, or explanation before or after it.
+
+Use plain HTML, CSS, and JavaScript. No external libraries, fonts, images, CDNs, network requests, or tools. Create the visual assets yourself using inline SVG, CSS, or canvas. The page must work offline.
+
+VISUAL DIRECTION
+
+Create a sophisticated architectural illustration brought to life.
+
+Use a warm ivory background, dark ink typography, restrained teal accents, and a contrasting accent for the patient&#x27;s active location. Choose the exact colors yourself. Combine expressive display typography with highly readable interface text, using available system fonts.
+
+The main visual must be a large, detailed isometric or axonometric cutaway of a fictional clinic. It should occupy at least half of the opening desktop viewport.
+
+Draw recognizable spaces:
+
+* An entrance and reception desk.
+* A waiting area with individual chairs and plants.
+* A vitals station with a chair and equipment.
+* A consultation room with a desk, chairs, and examination table.
+* A checkout area.
+
+Make the clinic feel spatially coherent through consistent perspective, walls, floor surfaces, furniture, depth, shadows, and lighting. Include small details that reward a closer look. Keep routes and labels legible.
+
+The patient must be a recognizable illustrated marker or character whose location can move through the clinic. The route should follow the walkable floor between spaces. Rooms should respond visually when active or selected.
+
+Design the whole page as a cohesive experience, including the header, typography, controls, explanatory text, and footer. Use the headline &quot;A clearer picture of every visit.&quot; Write concise supporting copy appropriate to a fictional clinic walkthrough.
+
+THE INTERACTIVE STORY
+
+Follow a fictional patient named Jamie through these five milestones:
+
+1. 9:00 AM — Arrival
+Location: Entrance
+Detail: Jamie arrives for a scheduled appointment.
+2. 9:03 AM — Check-in
+Location: Reception
+Detail: Contact information and visit paperwork are confirmed.
+3. 9:10 AM — Vitals
+Location: Vitals station
+Detail: A care-team member records measurements and reviews the medication list.
+4. 9:18 AM — Consultation
+Location: Consultation room
+Detail: Jamie and the clinician discuss the reason for the visit and agree on next steps.
+5. 9:35 AM — Checkout
+Location: Checkout
+Detail: Jamie receives the visit summary and arranges follow-up.
+
+Display an interactive timeline with these exact times and milestones. The following elements must stay synchronized:
+
+* The selected timeline milestone.
+* The patient&#x27;s location in the clinic.
+* The highlighted room or area.
+* The displayed time.
+* A concise detail panel.
+* Elapsed visit time measured from 9:00 AM.
+
+Users must be able to:
+
+* Select any timeline milestone, including moving backward.
+* Select a corresponding room in the illustration to jump to its milestone.
+* Press Play to advance through the journey, with one milestone every three seconds.
+* Pause at the current milestone.
+* Restart at Arrival.
+
+Animate the patient traveling along the route and transition room highlights smoothly. Playback must stop at Checkout. Start paused at Arrival so the initial view is consistent.
+
+Below the main experience, include an elegantly designed visit-summary section showing all five milestones and the total visit duration. Make it feel like part of the same visual story.
+
+CRAFT AND RESPONSIVENESS
+
+Make important controls easy to discover. Provide clear hover, focus, selected, and disabled states. Use motion to explain changes while keeping text stable and readable.
+
+Support keyboard interaction and reduced-motion preferences. Supply an accessible text equivalent of the illustrated journey.
+
+At 1440 × 900, the opening view must show the headline, substantial clinic illustration, current milestone details, and playback controls.
+
+At 390 × 844, reorganize the interface into a deliberate mobile composition. Keep labels and controls readable, make the timeline usable, and allow vertical scrolling without horizontal overflow.
+
+Keep all information consistent with the supplied fictional visit. Elapsed time and displayed time derive only from the milestone times above: do not use the current date or time, and do not show a live clock. Do not add vital-sign values, medication names, diagnoses, clinical recommendations, clinician or staff names, a clinic name, address, phone number, insurance, sign-in, payments, or references to the model, the AI, or the implementation. Every interactive control must work. Keep state in memory only; do not use localStorage, sessionStorage, or cookies.
+
+Prioritize a beautifully composed illustration, coherent visual design, and a complete working experience. Finish the implementation in this response without asking questions.
+</pre></main></body></html>

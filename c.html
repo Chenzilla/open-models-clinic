@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f1e9">
+<title>Care, in motion. — A fictional clinic walkthrough</title>
+<style>
+:root{--paper:#f4f1e9;--white:#fcfbf7;--ink:#243d39;--muted:#737c73;--line:#dcded3;--teal:#326b61;--soft:#e6ece3;--active:#b95c3e;--active-soft:#f5e2d4}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit}
+button,a,[tabindex]{touch-action:manipulation}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--active);outline-offset:5px}
+a{color:inherit}
+.wrap{width:min(1360px,calc(100% - 80px));margin:auto}
+.site-header{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;font:25px Georgia,'Times New Roman',serif;letter-spacing:-.8px}
+.brand-mark{width:29px;height:29px;position:relative;border:1px solid var(--teal);border-radius:50%;display:grid;place-items:center}
+.brand-mark:before,.brand-mark:after{content:"";position:absolute;background:var(--teal);border-radius:1px;transform:rotate(-15deg)}
+.brand-mark:before{width:15px;height:5px}
+.brand-mark:after{width:5px;height:15px}
+.header-right{display:flex;align-items:center;gap:30px;font-size:12px}
+.fiction-tag{display:flex;align-items:center;gap:7px;color:var(--muted)}
+.fiction-tag:before{content:"";width:6px;height:6px;background:#8a9c82;border-radius:50%}
+.summary-link{text-decoration:none;border-bottom:1px solid #a5b1a3;padding:5px 0}
+.summary-link:hover{color:var(--active);border-color:var(--active)}
+.intro{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:29px 0 26px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.intro .eyebrow{margin:0 0 12px;color:var(--teal)}
+h1{font:clamp(35px,3.8vw,57px)/1.08 Georgia,'Times New Roman',serif;letter-spacing:-2.4px;margin:0}
+h1 em{font-weight:400;color:var(--teal)}
+.intro-copy{max-width:278px;font-size:13px;line-height:1.7;margin:0 0 2px;color:#65716a}
+.experience{display:grid;grid-template-columns:minmax(0,1fr) 280px;background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 10px 35px #344e3510}
+.map-panel{position:relative;min-width:0;height:530px;background:radial-gradient(ellipse at 50% 55%,#fffefa 0%,#f8f7ef 68%,#f0f0e6 100%);overflow:hidden}
+.map-heading{position:absolute;left:25px;top:23px;z-index:2;pointer-events:none}
+.map-heading .eyebrow{font-size:9px;letter-spacing:1.8px}
+.map-heading p{font-size:11px;color:var(--muted);margin:7px 0 0}
+.map-heading p span{color:var(--active)}
+#clinic{width:100%;height:100%;display:block;overflow:visible}
+.room-fill{transition:fill .5s ease}
+.room-hit{fill:transparent;stroke:transparent;stroke-width:1.6;stroke-linejoin:round;transition:fill .25s,stroke .25s}
+.room-target{cursor:pointer;outline:none}
+.room-target:hover .room-hit{fill:#326b6110;stroke:#326b6170}
+.room-target:focus-visible .room-hit{fill:#326b6110;stroke:var(--teal);stroke-width:4;stroke-dasharray:6 4}
+.room-target.is-active .room-hit{fill:#b95c3e07;stroke:#b95c3e70}
+.room-label-bg{fill:#fcfbf5;stroke:#d4d9cc;transition:fill .3s,stroke .3s}
+.room-label-text{fill:var(--ink);font-family:Arial,Helvetica,sans-serif;font-weight:600}
+.room-label-number{fill:#326b61;transition:fill .3s}
+.room-target:hover .room-label-bg{fill:#edf1e8;stroke:var(--teal)}
+.room-target.is-active .room-label-bg{fill:var(--active);stroke:var(--active)}
+.room-target.is-active .room-label-text{fill:#fffaf3}
+.room-target.is-active .room-label-number{fill:#ffffff24}
+.room-target:focus-visible .room-label-bg{stroke:var(--teal);stroke-width:4}
+.map-key{position:absolute;bottom:20px;left:25px;display:flex;align-items:center;gap:15px;font-size:10px;color:#6c786d}
+.key-item{display:flex;align-items:center;gap:6px}
+.key-dot{width:7px;height:7px;border-radius:50%;background:var(--active);box-shadow:0 0 0 3px #b95c3e15}
+.key-line{width:20px;border-top:2px dashed #82988a}
+.map-note{position:absolute;right:22px;bottom:20px;color:#90978a;font-size:9px;letter-spacing:1px}
+.detail-panel{border-left:1px solid var(--line);padding:28px 25px 22px;display:flex;flex-direction:column;min-width:0;background:#fcfbf7}
+.patient-intro{display:flex;align-items:center;gap:10px;margin-bottom:25px}
+.avatar{width:36px;height:36px;background:#efe6d7;border-radius:50%;overflow:hidden;flex-shrink:0}
+.patient-intro .eyebrow{font-size:9px;letter-spacing:1.5px}
+.patient-intro small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.status{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:9px;color:var(--muted)}
+.status-dot{height:5px;width:5px;border-radius:50%;background:#99a193}
+.status.playing .status-dot{background:var(--active);box-shadow:0 0 0 3px #b95c3e15}
+.current-time{font:50px/.98 Georgia,'Times New Roman',serif;letter-spacing:-2px;margin:0 0 18px;white-space:nowrap}
+.current-time small{font:11px Arial,Helvetica,sans-serif;letter-spacing:.4px;margin-left:6px}
+.step-kicker{font-size:9px;color:var(--active);letter-spacing:1.8px;font-weight:700;margin-bottom:8px}
+.current-title{font:30px/1.1 Georgia,'Times New Roman',serif;letter-spacing:-.7px;margin:0 0 10px}
+.location{font-size:11px;color:var(--teal);display:flex;align-items:center;gap:5px;margin-bottom:15px}
+.location svg{width:13px;height:13px;flex-shrink:0}
+.current-description{font-size:12px;line-height:1.75;color:#69736c;margin:0;min-height:84px}
+.panel-bottom{margin-top:auto;padding-top:18px}
+.elapsed-label{display:flex;justify-content:space-between;align-items:baseline;font-size:10px;color:var(--muted);margin-bottom:9px}
+.elapsed-label strong{font-size:12px;color:var(--ink);font-weight:500}
+.progress{height:3px;background:#e6e8df;border-radius:3px;overflow:hidden;margin-bottom:19px}
+.progress-fill{height:100%;width:0;background:var(--active);transition:width .6s ease}
+.controls{display:flex;gap:8px}
+.play-button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;padding:12px 8px;border:1px solid var(--ink);border-radius:4px;color:#fffdf6;background:var(--ink);font-size:12px;min-height:42px;transition:background .2s,transform .2s}
+.play-button:hover:not(:disabled){background:var(--teal);border-color:var(--teal)}
+.play-button:active:not(:disabled){transform:translateY(1px)}
+.play-button:disabled{background:#dde2d8;color:#7c867a;border-color:#dde2d8;cursor:default}
+.play-button svg{width:12px;height:12px}
+.restart-button{display:flex;align-items:center;justify-content:center;gap:5px;background:transparent;color:var(--ink);border:1px solid #d8ddd1;border-radius:4px;font-size:11px;padding:10px}
+.restart-button svg{width:13px;height:13px}
+.restart-button:hover{background:var(--soft);border-color:#a7b5a0}
+.play-hint{text-align:center;color:#879081;font-size:9px;margin:10px 0 0}
+.timeline{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);padding:18px 25px 17px;gap:0}
+.timeline-step{position:relative;text-align:left;border:0;background:transparent;padding:0 13px 0 0;display:grid;grid-template-columns:27px 1fr;column-gap:11px;align-content:start;transition:opacity .2s;min-width:0;border-radius:3px}
+.timeline-step:before{content:"";height:1px;background:#dde1d5;position:absolute;top:13px;left:37px;right:10px}
+.timeline-step:last-child:before{display:none}
+.step-dot{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;border:1px solid #c8d0c2;color:#7b8677;font-size:10px;background:var(--white);grid-row:1/3;transition:background .25s,color .25s,border-color .25s}
+.step-time{z-index:1;position:relative;background:var(--white);width:fit-content;padding-right:10px;font-size:10px;color:#74806f;margin-top:1px;margin-bottom:7px;white-space:nowrap}
+.step-name{font-size:13px;font-weight:500}
+.timeline-step:hover .step-dot{border-color:var(--teal);background:var(--soft)}
+.timeline-step:hover .step-name{color:var(--teal)}
+.timeline-step.is-past .step-dot{background:#e8eee3;color:var(--teal);border-color:#e8eee3}
+.timeline-step[aria-pressed="true"] .step-dot{background:var(--active);color:white;border-color:var(--active);box-shadow:0 0 0 4px #b95c3e0c}
+.timeline-step[aria-pressed="true"] .step-name,.timeline-step[aria-pressed="true"] .step-time{color:var(--active)}
+.experience-caption{display:flex;justify-content:space-between;gap:20px;font-size:10px;color:#7e877a;margin:13px 1px 0}
+.caption-index{color:var(--teal)}
+.visit-summary{padding:64px 0 53px;scroll-margin-top:25px}
+.summary-heading{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:20px}
+.summary-heading .eyebrow{color:var(--teal);margin:0 0 12px}
+h2{font:36px/1.15 Georgia,'Times New Roman',serif;letter-spacing:-1px;margin:0}
+.duration{display:flex;align-items:center;gap:14px}
+.duration strong{font:46px/1 Georgia,'Times New Roman',serif;letter-spacing:-2px}
+.duration span{font-size:10px;line-height:1.7;color:var(--muted)}
+.summary-grid{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0;margin:0;border-top:1px solid #bfcabc}
+.summary-card{padding:23px 22px 0 0;position:relative}
+.summary-card:before{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:var(--teal);top:-3px;left:0}
+.summary-card+.summary-card{padding-left:20px;border-left:1px solid var(--line)}
+.summary-card+.summary-card:before{left:20px}
+.summary-meta{font-size:10px;color:var(--teal);letter-spacing:.4px;margin-bottom:13px}
+.summary-card h3{font:21px Georgia,'Times New Roman',serif;margin:0 0 7px;letter-spacing:-.4px}
+.summary-location{font-size:10px;color:#88917f;margin:0 0 12px}
+.summary-card p:last-child{font-size:11px;line-height:1.8;color:#657365;margin:0}
+footer{border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:20px 0 28px;font-size:10px;color:var(--muted);gap:20px}
+.footer-brand{font:18px Georgia,'Times New Roman',serif;color:var(--teal)}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(min-width:1500px){.map-panel{height:580px}.detail-panel{padding:35px 28px}.current-description{font-size:13px}}
+@media(max-width:1150px) and (min-width:701px){.wrap{width:calc(100% - 44px)}.intro-copy{max-width:230px;font-size:12px}h1{font-size:39px}.experience{grid-template-columns:minmax(0,1fr) 247px}.map-panel{height:485px}.detail-panel{padding:25px 19px 20px}.map-heading{left:18px;top:20px}.map-note{display:none}.map-key{left:18px}.timeline{padding:18px}.timeline-step{column-gap:7px}.step-name{font-size:12px}.summary-card{padding-right:15px}}
+@media(max-width:700px){
+.wrap{width:calc(100% - 32px)}
+.site-header{height:65px}.brand{font-size:22px;gap:9px}.brand-mark{width:25px;height:25px}.header-right{gap:0;font-size:10px}.fiction-tag{display:none}
+.intro{display:block;padding:27px 0 23px}.intro .eyebrow{font-size:9px;margin-bottom:12px;letter-spacing:1.7px}h1{font-size:43px;line-height:1.07;letter-spacing:-1.9px;max-width:470px}.intro-copy{max-width:320px;font-size:12px;line-height:1.7;margin:14px 0 0}
+.experience{grid-template-columns:minmax(0,1fr);border-radius:6px}
+.map-panel{height:auto;aspect-ratio:700/900;order:1;max-height:630px}
+.map-heading{top:18px;left:17px}.map-heading .eyebrow{font-size:8px}.map-heading p{font-size:10px;max-width:180px;line-height:1.5;margin-top:5px}
+.map-key{left:17px;bottom:13px;font-size:9px;gap:13px}.map-note{display:none}
+.timeline{order:2;padding:15px 6px 13px;gap:2px}
+.timeline-step{padding:0;display:flex;flex-direction:column;align-items:center;gap:0;text-align:center}
+.timeline-step:before{left:calc(50% + 14px);right:calc(-50% + 14px);top:12px}
+.step-dot{width:25px;height:25px;font-size:9px;margin-bottom:10px}
+.step-time{font-size:9px;background:transparent;padding:0;margin:0 0 5px;letter-spacing:-.2px}
+.step-name{font-size:10px;letter-spacing:-.2px}
+.detail-panel{order:3;border-left:0;border-top:1px solid var(--line);padding:22px;display:grid;grid-template-columns:1fr 1fr;column-gap:17px}
+.patient-intro{grid-column:1/-1;margin-bottom:20px}.patient-intro .eyebrow{font-size:10px}.patient-intro small{font-size:10px}.status{font-size:10px}.avatar{width:34px;height:34px}
+.current-content{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;column-gap:10px}
+.current-time{grid-column:2;grid-row:1/4;font-size:43px;margin:7px 0 0;align-self:start}.current-time small{font-size:10px;margin-left:4px}
+.step-kicker{grid-column:1;font-size:8px;margin-bottom:7px}
+.current-title{grid-column:1;font-size:29px;margin-bottom:9px}
+.location{grid-column:1;font-size:10px;margin-bottom:14px}
+.current-description{grid-column:1/-1;font-size:12px;min-height:55px;line-height:1.7}
+.panel-bottom{grid-column:1/-1;padding-top:17px;margin:0}.progress{margin-bottom:16px}.controls{gap:10px}.play-button{font-size:12px}.restart-button{padding:10px 18px}.play-hint{font-size:9px}
+.experience-caption{font-size:9px;line-height:1.6;margin-top:12px;gap:12px}.experience-caption span:last-child{text-align:right;max-width:145px}
+.visit-summary{padding:43px 0 32px}.summary-heading{align-items:flex-end;margin-bottom:27px}h2{font-size:29px;letter-spacing:-1px;max-width:200px}.summary-heading .eyebrow{font-size:8px;letter-spacing:1.6px}.duration{gap:8px}.duration strong{font-size:38px}.duration span{font-size:9px}
+.summary-grid{display:block;border-top:0;border-left:1px solid #bfcabc;margin-left:5px}
+.summary-card,.summary-card+.summary-card{padding:0 0 26px 24px;border:0;display:grid;grid-template-columns:74px 1fr;column-gap:12px}
+.summary-card:last-child{padding-bottom:0}
+.summary-card:before,.summary-card+.summary-card:before{left:-3px;top:4px;width:5px;height:5px}
+.summary-meta{grid-column:1;grid-row:1/4;font-size:10px;margin-top:3px}
+.summary-card h3{grid-column:2;font-size:22px;margin-bottom:6px}.summary-location{grid-column:2;margin-bottom:9px}.summary-card p:last-child{grid-column:2;font-size:11px;line-height:1.7}
+footer{align-items:flex-start;font-size:9px;line-height:1.7;padding:20px 0 24px}footer p{margin:0;max-width:160px;text-align:right}.footer-brand{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="site-header wrap">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Care, in motion.</div>
+  <div class="header-right">
+    <span class="fiction-tag">A fictional visit</span>
+    <a class="summary-link" href="#visit-summary">Visit summary <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro" aria-labelledby="headline">
+    <div>
+      <p class="eyebrow">One patient. Five moments. A connected journey.</p>
+      <h1 id="headline">A clearer picture of <em>every visit.</em></h1>
+    </div>
+    <p class="intro-copy">Follow Jamie through a clinic visit. Explore each space and see how the moments of care fit together.</p>
+  </section>
+
+  <section class="experience" aria-label="Jamie's interactive clinic visit">
+    <div class="map-panel">
+      <div class="map-heading">
+        <div class="eyebrow">Inside the visit</div>
+        <p>Select a room to follow <span>Jamie.</span></p>
+      </div>
+      <svg id="clinic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 575" role="group" aria-labelledby="clinic-title clinic-desc">
+        <title id="clinic-title">Explore Jamie's journey through the clinic</title>
+        <desc id="clinic-desc">An architectural cutaway with entrance, reception, waiting chairs, vitals station, consultation room, and checkout. Jamie is the patient in a terracotta cardigan. Select one of the five numbered areas, or use the timeline. A complete text description of the visit is provided in the visit summary below.</desc>
+      </svg>
+      <div class="map-key" aria-hidden="true">
+        <span class="key-item"><span class="key-dot"></span>Jamie</span>
+        <span class="key-item"><span class="key-line"></span>Visit route</span>
+      </div>
+      <span class="map-note" aria-hidden="true">A LITTLE PERSPECTIVE ON CARE</span>
+    </div>
+
+    <aside class="detail-panel" aria-label="Current visit milestone">
+      <div class="patient-intro">
+        <svg class="avatar" viewBox="0 0 36 36" aria-hidden="true">
+          <path d="M5 38Q6 23 18 23Q30 23 31 38" fill="#b95c3e"/>
+          <path d="M14 21h8v7q-4 4-8 0" fill="#d6a077"/>
+          <ellipse cx="18" cy="15" rx="7" ry="9" fill="#e1b18c"/>
+          <path d="M11 17Q7 5 17 4Q27 3 26 16l-3-4-1-3q-4 6-11 4" fill="#3d4237"/>
+        </svg>
+        <div><div class="eyebrow">Jamie's visit</div><small>A fictional walkthrough</small></div>
+        <span class="status" id="status"><span class="status-dot"></span><span id="status-text">Paused</span></span>
+      </div>
+      <div class="current-content" aria-live="polite" aria-atomic="true">
+        <p class="current-time"><span id="current-time">9:00</span><small>AM</small></p>
+        <div class="step-kicker" id="step-kicker">MOMENT 01 / 05</div>
+        <h2 class="current-title" id="current-title">Arrival</h2>
+        <div class="location">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12.8 6.4c0 3.4-4.8 7.5-4.8 7.5S3.2 9.8 3.2 6.4a4.8 4.8 0 1 1 9.6 0Z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="6.2" r="1.6" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span id="current-location">Entrance</span>
+        </div>
+        <p class="current-description" id="current-description">Jamie arrives for a scheduled appointment.</p>
+        <span class="sr-only" id="elapsed-announcement">0 minutes elapsed.</span>
+      </div>
+      <div class="panel-bottom">
+        <div class="elapsed-label"><span>Visit time elapsed</span><strong><span id="elapsed">0</span> <span style="color:#84907e">/ 35 min</span></strong></div>
+        <div class="progress" role="progressbar" aria-label="Elapsed visit time" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0" id="progress"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="controls">
+          <button class="play-button" id="play" type="button">
+            <svg id="play-icon" viewBox="0 0 14 14" aria-hidden="true"><path d="m4 2 8 5-8 5Z" fill="currentColor"/></svg>
+            <span id="play-label">Play visit</span>
+          </button>
+          <button class="restart-button" id="restart" type="button" aria-label="Restart visit at Arrival">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.1 5a5.5 5.5 0 1 1-.5 5M3 1.5V5h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Restart
+          </button>
+        </div>
+        <p class="play-hint">One moment every 3 seconds. Your pace.</p>
+      </div>
+    </aside>
+
+    <nav class="timeline" aria-label="Select a visit milestone">
+      <button type="button" class="timeline-step" data-step="0" aria-pressed="true" aria-label="9:00 AM — Arrival, Entrance">
+        <span class="step-dot">1</span><span class="step-time">9:00 AM</span><span class="step-name">Arrival</span>
+      </button>
+      <button type="button" class="timeline-step" data-step="1" aria-pressed="false" aria-label="9:03 AM — Check-in, Reception">
+        <span class="step-dot">2</span><span class="step-time">9:03 AM</span><span class="step-name">Check-in</span>
+      </button>
+      <button type="button" class="timeline-step" data-step="2" aria-pressed="false" aria-label="9:10 AM — Vitals, Vitals station">
+        <span class="step-dot">3</span><span class="step-time">9:10 AM</span><span class="step-name">Vitals</span>
+      </button>
+      <button type="button" class="timeline-step" data-step="3" aria-pressed="false" aria-label="9:18 AM — Consultation, Consultation room">
+        <span class="step-dot">4</span><span class="step-time">9:18 AM</span><span class="step-name">Consultation</span>
+      </button>
+      <button type="button" class="timeline-step" data-step="4" aria-pressed="false" aria-label="9:35 AM — Checkout, Checkout">
+        <span class="step-dot">5</span><span class="step-time">9:35 AM</span><span class="step-name">Checkout</span>
+      </button>
+    </nav>
+  </section>
+
+  <div class="experience-caption">
+    <span><span class="caption-index">01—05</span> &nbsp; Small moments. One continuous visit.</span>
+    <span>Illustrative only. Every real visit is different.</span>
+  </div>
+
+  <section class="visit-summary" id="visit-summary" aria-labelledby="summary-title">
+    <div class="summary-heading">
+      <div><p class="eyebrow">The visit, at a glance</p><h2 id="summary-title">From hello to next steps.</h2></div>
+      <div class="duration"><strong>35</strong><span>minutes<br>total visit</span></div>
+    </div>
+    <ol class="summary-grid">
+      <li class="summary-card"><div class="summary-meta">9:00 AM</div><h3>Arrival</h3><p class="summary-location">Entrance</p><p>Jamie arrives for a scheduled appointment.</p></li>
+      <li class="summary-card"><div class="summary-meta">9:03 AM</div><h3>Check-in</h3><p class="summary-location">Reception</p><p>Contact information and visit paperwork are confirmed.</p></li>
+      <li class="summary-card"><div class="summary-meta">9:10 AM</div><h3>Vitals</h3><p class="summary-location">Vitals station</p><p>A care-team member records measurements and reviews the medication list.</p></li>
+      <li class="summary-card"><div class="summary-meta">9:18 AM</div><h3>Consultation</h3><p class="summary-location">Consultation room</p><p>Jamie and the clinician discuss the reason for the visit and agree on next steps.</p></li>
+      <li class="summary-card"><div class="summary-meta">9:35 AM</div><h3>Checkout</h3><p class="summary-location">Checkout</p><p>Jamie receives the visit summary and arranges follow-up.</p></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="wrap"><span class="footer-brand">Care, in motion.</span><p>A fictional patient. A familiar journey.<br>Made for a little more understanding.</p></footer>
+
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('clinic');
+const mobileQuery=window.matchMedia('(max-width:700px)');
+const motionQuery=window.matchMedia('(prefers-reduced-motion:reduce)');
+const stages=[
+ {time:'9:00',minute:0,title:'Arrival',location:'Entrance',detail:'Jamie arrives for a scheduled appointment.',point:[335,422]},
+ {time:'9:03',minute:3,title:'Check-in',location:'Reception',detail:'Contact information and visit paperwork are confirmed.',point:[480,350]},
+ {time:'9:10',minute:10,title:'Vitals',location:'Vitals station',detail:'A care-team member records measurements and reviews the medication list.',point:[240,167]},
+ {time:'9:18',minute:18,title:'Consultation',location:'Consultation room',detail:'Jamie and the clinician discuss the reason for the visit and agree on next steps.',point:[469,170]},
+ {time:'9:35',minute:35,title:'Checkout',location:'Checkout',detail:'Jamie receives the visit summary and arranges follow-up.',point:[86,164]}
+];
+const segments=[
+ [[335,422],[335,366],[394,350],[480,350]],
+ [[480,350],[408,350],[408,242],[287,242],[240,221],[240,167]],
+ [[240,167],[240,220],[287,242],[444,242],[469,215],[469,170]],
+ [[469,170],[469,216],[437,242],[110,242],[86,211],[86,164]]
+];
+let selected=0,playing=false,timer=null,animation=null,patientPoint=stages[0].point.slice(),mobile=false,patient;
+let objects=[],scene,decor;
+function el(tag,attrs,parent,text){
+ const n=document.createElementNS(NS,tag);
+ Object.entries(attrs||{}).forEach(([k,v])=>n.setAttribute(k,v));
+ if(text!==undefined)n.textContent=text;
+ if(parent)parent.appendChild(n);
+ return n;
+}
+function P(x,y,z=0){
+ return mobile?[270+.55*x-.55*y,135+.61*x+.61*y-.9*z]:[437+.86*x-.86*y,107+.40*x+.40*y-.95*z];
+}
+function points(ps){return ps.map(a=>P(...a).map(v=>v.toFixed(2)).join(',')).join(' ')}
+function poly(ps,fill,parent,extra={}){
+ return el('polygon',{points:points(ps),fill,...extra},parent);
+}
+function line(ps,stroke,width,parent,extra={}){
+ return el('polyline',{points:points(ps),fill:'none',stroke,'stroke-width':width,'stroke-linecap':'round','stroke-linejoin':'round',...extra},parent);
+}
+function rectFloor(x,y,w,d,z,fill,parent,extra={}){
+ return poly([[x,y,z],[x+w,y,z],[x+w,y+d,z],[x,y+d,z]],fill,parent,extra);
+}
+function box(x,y,w,d,h,z,colors,parent){
+ const c=Array.isArray(colors)?colors:[colors,colors,colors];
+ poly([[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+h],[x,y+d,z+h]],c[1],parent);
+ poly([[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+h],[x+w,y,z+h]],c[2],parent);
+ rectFloor(x,y,w,d,z+h,c[0],parent);
+}
+function shadow(x,y,w,d,parent){
+ rectFloor(x+7,y+7,w,d,.5,'#263c2e12',parent);
+}
+function obj(depth,draw){
+ const g=el('g',{},null);draw(g);objects.push({depth,g});
+}
+function chair(x,y,color='#829b83',wide=29){
+ obj(x+y+wide,g=>{
+  shadow(x,y,wide,31,g);
+  [[3,4],[wide-6,4],[3,26],[wide-6,26]].forEach(([a,b])=>box(x+a,y+b,3,3,18,0,['#6e7b70','#617266','#83907e'],g));
+  box(x,y,wide,31,5,18,[color,'#597b68','#6b8971'],g);
+  box(x,y,wide,5,25,23,[color,'#78927a','#4f7562'],g);
+  line([[x+3,y+5,43],[x+wide-3,y+5,43]],'#ffffff35',1,g);
+ });
+}
+function desk(x,y,w,d,g){
+ shadow(x,y,w,d,g);
+ box(x+5,y+5,23,d-8,34,0,['#e1dfce','#cecfbb','#b9c4b0'],g);
+ box(x+w-12,y+4,5,d-7,35,0,['#b3bba7','#b3bba7','#96a48f'],g);
+ box(x-2,y-2,w+4,d+4,5,34,['#ddc5a0','#ba9975','#c9ae86'],g);
+ line([[x+9,y+d-3,25],[x+24,y+d-3,25]],'#a1ab98',1,g);
+ line([[x+9,y+d-3,16],[x+24,y+d-3,16]],'#a1ab98',1,g);
+}
+function monitor(x,y,z,g){
+ box(x+9,y+6,14,11,2,z,['#748c7e','#526e61','#607c6d'],g);
+ box(x+14,y+5,4,5,10,z+2,['#738b7d','#647f6e','#526f63'],g);
+ box(x,y,33,4,24,z+10,['#516e61','#355c50','#294e43'],g);
+ poly([[x+3,y+4.1,z+13],[x+30,y+4.1,z+13],[x+30,y+4.1,z+31],[x+3,y+4.1,z+31]],'#bcd7cf',g);
+ line([[x+7,y+4.3,z+26],[x+20,y+4.3,z+26]],'#edf5e8',1.5,g);
+ line([[x+7,y+4.3,z+21],[x+24,y+4.3,z+21]],'#87b4a5',1.3,g);
+ box(x+2,y+17,29,10,1,z,['#e4e7dc','#c1cabb','#c1cabb'],g);
+ for(let j=0;j<3;j++)line([[x+5,y+19+j*2,z+1.1],[x+27,y+19+j*2,z+1.1]],'#acb8a6',.65,g);
+}
+function papers(x,y,z,g){
+ rectFloor(x,y,17,23,z,'#fffdf2',g);
+ for(let j=0;j<4;j++)line([[x+4,y+6+j*3,z+.1],[x+13,y+6+j*3,z+.1]],'#c5cbb9',.7,g);
+ rectFloor(x+2,y,13,3,z+.2,'#8fa18a',g);
+}
+function plant(x,y,size=1){
+ obj(x+y+20,g=>{
+  const p=P(x,y,0),top=P(x,y,23*size);
+  el('ellipse',{cx:p[0]+5,cy:p[1]+2,rx:17*size,ry:7*size,fill:'#233b2d13'},g);
+  el('path',{d:`M${top[0]-14*size} ${top[1]}L${p[0]-10*size} ${p[1]}Q${p[0]} ${p[1]+7*size} ${p[0]+10*size} ${p[1]}L${top[0]+14*size} ${top[1]}Z`,fill:'#cfbea1'},g);
+  el('ellipse',{cx:top[0],cy:top[1],rx:14*size,ry:6*size,fill:'#e1d4ba'},g);
+  el('ellipse',{cx:top[0],cy:top[1],rx:10*size,ry:4*size,fill:'#6b7860'},g);
+  [[-20,-31],[-7,-46],[14,-40],[24,-22],[-24,-13],[5,-29]].forEach(([dx,dy],i)=>{
+   const a=top[0],b=top[1];
+   el('path',{d:`M${a} ${b}Q${a+dx*size*.3} ${b+dy*size*.8} ${a+dx*size} ${b+dy*size}`,fill:'none',stroke:'#597659','stroke-width':1.5*size},g);
+   el('ellipse',{cx:a+dx*size*.72,cy:b+dy*size*.78,rx:6*size,ry:14*size,fill:['#537b5d','#78936b','#8ca276'][i%3],transform:`rotate(${dx<0?-43:38} ${a+dx*size*.72} ${b+dy*size*.78})`},g);
+  });
+ });
+}
+function windowY(x,w,g){
+ poly([[x,5,34],[x+w,5,34],[x+w,5,83],[x,5,83]],'#9ab8a9',g);
+ poly([[x+3,6,37],[x+w-3,6,37],[x+w-3,6,80],[x+3,6,80]],'#d4e3d9',g);
+ for(let a=1;a<4;a++)line([[x+w*a/4,7,36],[x+w*a/4,7,81]],'#faf9ee',3,g);
+ line([[x+2,7,56],[x+w-2,7,56]],'#f6f6e9',3,g);
+ poly([[x+7,6.5,40],[x+28,6.5,40],[x+65,6.5,78],[x+44,6.5,78]],'#ffffff35',g);
+ box(x-2,1,w+4,11,4,30,['#f6f2e7','#c9cdbb','#afbda9'],g);
+}
+function windowX(y,d,g){
+ poly([[5,y,34],[5,y+d,34],[5,y+d,82],[5,y,82]],'#9cb7a8',g);
+ poly([[6,y+3,37],[6,y+d-3,37],[6,y+d-3,79],[6,y+3,79]],'#d0e0d6',g);
+ for(let a=1;a<4;a++)line([[7,y+d*a/4,36],[7,y+d*a/4,80]],'#f3f5e7',3,g);
+ line([[7,y+2,58],[7,y+d-2,58]],'#f3f5e7',3,g);
+ box(0,y-2,12,d+4,4,30,['#e5e6d5','#bac8b3','#c2cdba'],g);
+}
+function buildScene(){
+ if(animation){cancelAnimationFrame(animation);animation=null}
+ mobile=mobileQuery.matches;
+ svg.setAttribute('viewBox',mobile?'0 0 700 900':'0 0 1050 575');
+ svg.querySelectorAll(':scope > g, :scope > defs').forEach(n=>n.remove());
+ const defs=el('defs',{},svg);
+ const filter=el('filter',{id:'building-shadow',x:'-20%',y:'-30%',width:'150%',height:'170%'},defs);
+ el('feGaussianBlur',{stdDeviation:mobile?12:10},filter);
+ scene=el('g',{'aria-hidden':'true'},svg);
+ const baseShadow=[[0,0,-18],[650,0,-18],[650,450,-18],[0,450,-18]];
+ poly(baseShadow,'#52694b28',scene,{filter:'url(#building-shadow)',transform:'translate(8 12)'});
+ box(-5,-5,650,450,13,-14,['#edeedf','#c6ceba','#b7c2ae'],scene);
+ rectFloor(0,0,640,440,0,'#e9e9dc',scene);
+
+ // The shared corridor stays open between the five destinations.
+ rectFloor(0,210,640,63,.1,'#f3f1e6',scene);
+ rectFloor(274,266,155,174,.1,'#f3f1e6',scene);
+ const floors=[
+  [282,354,116,85,'#efeee2'],
+  [440,274,198,164,'#e8eadd'],
+  [153,5,194,198,'#e4ebe1'],
+  [353,5,284,198,'#e8ede1'],
+  [5,5,142,198,'#e2e8db']
+ ];
+ floors.forEach((r,i)=>rectFloor(r[0],r[1],r[2],r[3],.3,r[4],scene,{id:'floor-'+i,class:'room-fill','data-base':r[4]}));
+ rectFloor(5,278,248,155,.3,'#e0e7d6',scene);
+ // Fine floor joints and a pale timber waiting-area inset.
+ for(let x=40;x<640;x+=40)line([[x,0,.5],[x,440,.5]],'#a8b59c15',.7,scene);
+ for(let y=40;y<440;y+=40)line([[0,y,.5],[640,y,.5]],'#a8b59c15',.7,scene);
+ rectFloor(20,293,202,126,.7,'#d7d9bc',scene);
+ for(let y=299;y<419;y+=12)line([[20,y,1],[222,y,1]],'#bdc3a459',.8,scene);
+ // Entry mat and threshold.
+ rectFloor(299,398,70,39,1,'#9cad95',scene);
+ for(let x=306;x<369;x+=7)line([[x,401,1.1],[x,434,1.1]],'#7e92776b',1,scene);
+ box(280,439,122,8,3,-1,['#c6cdbb','#a9b79f','#a9b79f'],scene);
+
+ const routePaths=[
+  [[335,430],[335,366],[394,350],[480,350]],
+  [[408,350],[408,242],[86,242],[86,164]],
+  [[240,242],[240,167]],
+  [[408,242],[469,242],[469,170]]
+ ];
+ routePaths.forEach(p=>line(p.map(a=>[...a,1.2]),'#8a9e88',2,scene,{'stroke-dasharray':'3 7',opacity:'.67'}));
+ el('polyline',{id:'active-route',fill:'none',stroke:'#bb7655','stroke-width':2.5,'stroke-linecap':'round','stroke-linejoin':'round',opacity:'.65','stroke-dasharray':'2 5'},scene);
+
+ // Tall rear walls, warm top caps, and a lower cutaway at the front.
+ box(-5,-5,650,6,94,0,['#f3f0e5','#dedfd0','#c1cab6'],scene);
+ box(-5,0,6,440,94,0,['#f2eee1','#bdcbb4','#d2dac5'],scene);
+ line([[2,3,6],[637,3,6]],'#c0c7b4',4,scene);
+ line([[3,3,6],[3,437,6]],'#a6baa0',4,scene);
+ windowY(394,208,scene);
+ windowX(268,148,scene);
+ // A quiet framed abstract print and a wall clock; no live time.
+ poly([[22,3,48],[60,3,48],[60,3,80],[22,3,80]],'#bba98a',scene);
+ poly([[25,4,51],[57,4,51],[57,4,77],[25,4,77]],'#f5f1de',scene);
+ poly([[29,4.2,52],[43,4.2,70],[54,4.2,52]],'#9bb18d',scene);
+ line([[175,4,68],[208,4,68]],'#86a18c',3,scene);
+ line([[175,4,59],[200,4,59]],'#b0bea4',2,scene);
+
+ objects=[];
+ // Partition walls leave generous doorways opening onto the central aisle.
+ obj(200,g=>{
+  box(148,0,6,145,78,0,['#faf5e8','#c5d0bb','#d3dac6'],g);
+  box(146,145,10,5,79,0,['#f4eddf','#dddccc','#c5cfb8'],g);
+ });
+ obj(400,g=>{
+  box(348,0,6,144,84,0,['#faf5e8','#c5d0bb','#d9dece'],g);
+  box(346,144,10,5,85,0,['#f4eddf','#dddccc','#c5cfb8'],g);
+ });
+ [[0,205,55],[116,205,34],[153,205,59],[273,205,75],[354,205,82],[504,205,136]].forEach(([x,y,w])=>{
+  obj(x+y+w*.5,g=>box(x,y,w,6,27,0,['#f9f4e8','#cbd4bd','#b9c8af'],g));
+ });
+ // Door thresholds, inset rather than obstructing the route.
+ [[57,58],[213,59],[438,65]].forEach(([x,w])=>{
+  rectFloor(x,202,w,11,1,'#d4dbc8',scene);
+  line([[x,215,1],[x+w,215,1]],'#fffdf1',1.5,scene);
+ });
+
+ // Checkout counter: workstation, paper tray, and a small open shelf.
+ obj(145,g=>{
+  desk(34,63,88,43,g);
+  monitor(71,69,39,g);
+  papers(40,78,39.5,g);
+  box(40,22,66,20,49,0,['#e2ddc7','#c8ceb6','#b1bfa5'],g);
+  line([[45,42.2,20],[101,42.2,20]],'#98a98e',1.4,g);
+  box(47,24,13,14,13,49,['#839b80','#6d8b6c','#7c9677'],g);
+  box(63,25,8,13,17,49,['#c8b18b','#b59973','#af976f'],g);
+ });
+ chair(69,22,'#9caf94',25);
+ plant(27,149,.7);
+
+ // Waiting area: individual upholstered chairs, side table, and reading material.
+ [35,90,145].forEach(x=>chair(x,303,'#8fa187',31));
+ [37,93].forEach(x=>chair(x,380,'#91a58c',31));
+ obj(500,g=>{
+  const c=P(182,369,20),base=P(182,369,0);
+  el('ellipse',{cx:base[0]+4,cy:base[1]+3,rx:27,ry:12,fill:'#31472d15'},g);
+  box(179,366,6,6,22,0,['#809377','#829178','#6e8468'],g);
+  el('ellipse',{cx:c[0],cy:c[1]+3,rx:29,ry:mobile?20:13,fill:'#baac87'},g);
+  el('ellipse',{cx:c[0],cy:c[1],rx:29,ry:mobile?20:13,fill:'#e5d7b4'},g);
+  rectFloor(170,360,18,23,22,'#f6f2df',g);
+  rectFloor(171,361,16,8,22.3,'#829981',g);
+  line([[175,372,22.4],[184,372,22.4]],'#bec5ad',1,g);
+ });
+ plant(28,244,1.15);
+ plant(228,394,.9);
+
+ // Vitals: an upholstered measurement chair with armrests.
+ chair(182,83,'#709689',43);
+ obj(300,g=>{
+  box(177,87,5,38,3,31,['#8eaaa0','#577f72','#648a7d'],g);
+  box(225,87,5,38,3,31,['#8eaaa0','#577f72','#648a7d'],g);
+  line([[179,119,31],[179,119,19]],'#7f9484',2,g);
+  line([[227,119,31],[227,119,19]],'#7f9484',2,g);
+  rectFloor(187,115,32,9,24,'#75998b',g);
+ });
+ obj(365,g=>{
+  shadow(278,71,34,34,g);
+  box(277,69,35,31,4,0,['#d6ddd0','#abbba6','#a4b5a2'],g);
+  box(291,78,6,7,63,4,['#a7bcae','#96b09e','#849e8d'],g);
+  box(277,77,35,8,27,55,['#f1f0e2','#d2ddcc','#bbcbb7'],g);
+  poly([[281,85.2,62],[308,85.2,62],[308,85.2,78],[281,85.2,78]],'#749b8d',g);
+  line([[285,85.4,68],[290,85.4,68],[292,85.4,73],[295,85.4,65],[298,85.4,70],[305,85.4,70]],'#e1efdc',1.1,g);
+  line([[280,82,56],[261,101,44],[252,110,24],[237,108,30],[228,104,32]],'#5e7c6b',2,g);
+  box(275,140,38,37,4,0,['#c9d4c5','#a4b6a0','#8ea58e'],g);
+  rectFloor(280,146,28,23,4.2,'#8ba38c',g);
+  rectFloor(285,143,17,5,4.3,'#d6e4cd',g);
+ });
+ // Small wall cabinet.
+ obj(235,g=>{
+  box(267,7,57,22,45,20,['#edf0e1','#d5decc','#bdcdb6'],g);
+  line([[296,29.2,23],[296,29.2,63]],'#b5c6ac',1,g);
+  line([[291,29.4,40],[291,29.4,47]],'#839c7a',1.6,g);
+  line([[301,29.4,40],[301,29.4,47]],'#839c7a',1.6,g);
+ });
+
+ // Consultation: desk and two chairs, exam table with pillow and paper roll.
+ chair(433,31,'#819b86',28);
+ chair(394,110,'#9aaa8c',31);
+ obj(575,g=>{
+  desk(411,74,111,43,g);
+  monitor(469,78,39,g);
+  papers(421,86,39.5,g);
+  const p=P(451,81,42);
+  el('ellipse',{cx:p[0],cy:p[1],rx:4,ry:3,fill:'#93a384'},g);
+  line([[451,81,42],[452,81,52]],'#70886b',2,g);
+ });
+ obj(739,g=>{
+  shadow(558,65,54,112,g);
+  box(566,78,37,80,32,0,['#d6dfd0','#b4c7b1','#9eb59f'],g);
+  box(556,60,58,116,7,32,['#73998a','#587e70','#648b7b'],g);
+  box(558,64,54,108,6,39,['#abc3b2','#8eac98','#9ab6a4'],g);
+  rectFloor(566,68,38,99,45.2,'#f4f1df',g);
+  box(565,67,39,23,7,45,['#fffbed','#dddcca','#e5e5d3'],g);
+  line([[568,78,52.1],[601,78,52.1]],'#e9e6d6',.9,g);
+  box(568,179,30,19,13,0,['#ccdac7','#a8bca2','#91ab91'],g);
+  rectFloor(571,182,24,12,13.2,'#8ca38a',g);
+ });
+ plant(611,184,.85);
+ // A low storage shelf holds folded linens.
+ obj(648,g=>{
+  box(610,14,25,94,35,0,['#e9e7d6','#d1d8c2','#b9c8af'],g);
+  [24,39,54].forEach(y=>box(613,y,18,11,5,35,['#f4f0df','#dddcca','#e4e5d3'],g));
+ });
+
+ // Reception is an L-shaped timber counter facing the entrance.
+ chair(526,261,'#6f8f7a',27);
+ obj(844,g=>{
+  shadow(461,295,156,44,g);
+  box(463,289,148,40,44,0,['#d7c19b','#c1a984','#aa9674'],g);
+  for(let x=470;x<609;x+=9)line([[x,329.1,4],[x,329.1,42]],'#a78f6870',1,g);
+  box(459,286,156,47,5,44,['#efead7','#d2c9ac','#c8bda0'],g);
+  box(585,252,29,35,44,0,['#d9c5a1','#c5ac87','#b49c79'],g);
+  box(581,249,37,39,5,44,['#efead7','#d2c9ac','#c8bda0'],g);
+  monitor(540,291,49,g);
+  papers(482,299,49.5,g);
+  box(509,299,17,12,2,49,['#a8bda8','#839d84','#97ad94'],g);
+  line([[513,303,51.2],[521,303,51.2]],'#f4f4e6',1,g);
+ });
+ plant(622,392,1.15);
+ // A small waste bin, discreetly beside reception.
+ obj(963,g=>{
+  box(606,346,17,17,24,0,['#d6decd','#a7b9a0','#bdcbb3'],g);
+  rectFloor(610,350,9,8,24.2,'#899f83',g);
+ });
+
+ // Low near-side walls make the floorplate read as a single building.
+ obj(1000,g=>box(639,0,5,440,16,0,['#f3efdf','#c4ceba','#bac8b1'],g));
+ obj(1010,g=>{
+  box(0,439,279,5,13,0,['#f3efdf','#bac8af','#b0c1a5'],g);
+  box(403,439,237,5,13,0,['#f3efdf','#bac8af','#b0c1a5'],g);
+  // Entrance door jambs and open glass leaf.
+  box(276,435,6,10,53,0,['#dce4d2','#a6bda4','#c1d0b6'],g);
+  box(400,435,6,10,53,0,['#dce4d2','#a6bda4','#c1d0b6'],g);
+  poly([[282,437,4],[305,401,4],[305,401,51],[282,437,51]],'#d1e4d34d',g,{stroke:'#8eac91','stroke-width':1.3});
+  line([[298,412,24],[298,412,33]],'#738f75',2,g);
+ });
+ objects.sort((a,b)=>a.depth-b.depth).forEach(o=>scene.appendChild(o.g));
+
+ // Plain-language room labels also serve as generous keyboard/touch targets.
+ const targetLayer=el('g',{},svg);
+ const labels=mobile?[
+  [190,684],[458,816],[393,220],[530,380],[286,113]
+ ]:[
+  [291,467],[715,520],[626,122],[853,226],[436,51]
+ ];
+ const areas=[
+  [282,351,126,88],
+  [437,273,198,164],
+  [154,5,191,197],
+  [355,5,282,197],
+  [5,5,140,197]
+ ];
+ stages.forEach((s,i)=>{
+  const g=el('g',{class:'room-target','data-room':i,tabindex:0,role:'button','aria-pressed':String(i===selected),'aria-label':`${s.location}: ${s.time} AM — ${s.title}. ${s.detail}`},targetLayer);
+  const a=areas[i];
+  rectFloor(...a,1,'transparent',g,{class:'room-hit'});
+  const [lx,ly]=labels[i],font=mobile?23:14,h=mobile?43:30;
+  const name=['Entrance','Reception','Vitals station','Consultation','Checkout'][i];
+  const w=name.length*(mobile?11.4:7.2)+(mobile?58:43);
+  const anchor=P(...s.point,0);
+  if(i===0||i===1){
+   el('path',{d:`M${lx} ${ly-h/2}L${anchor[0]} ${anchor[1]+8}`,fill:'none',stroke:'#8ca08b','stroke-width':1,opacity:'.55','pointer-events':'none'},g);
+  }
+  el('rect',{x:lx-w/2,y:ly-h/2,width:w,height:h,rx:mobile?7:5,class:'room-label-bg'},g);
+  const r=mobile?13:9,cx=lx-w/2+(mobile?23:16);
+  el('circle',{cx,cy:ly,r,class:'room-label-number'},g);
+  el('text',{x:cx,y:ly+(mobile?6:3.5),'text-anchor':'middle',fill:'#fffdf5','font-family':'Arial, sans-serif','font-size':mobile?17:10},g,String(i+1));
+  el('text',{x:cx+(mobile?23:16),y:ly+(mobile?7:4.5),'font-size':font,class:'room-label-text'},g,name);
+  g.addEventListener('click',()=>selectManually(i));
+  g.addEventListener('keydown',e=>{
+   if(e.key==='Enter'||e.key===' '){e.preventDefault();selectManually(i)}
+   const direction={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];
+   if(direction){e.preventDefault();const n=(i+direction+5)%5;selectManually(n);targetLayer.querySelector(`[data-room="${n}"]`).focus()}
+  });
+ });
+ decor=el('g',{'aria-hidden':'true','pointer-events':'none'},svg);
+ const wait=mobile?[81,487]:[147,355];
+ el('text',{x:wait[0],y:wait[1],fill:'#697d65','font-size':mobile?21:12,'font-family':'Arial, sans-serif','text-anchor':'middle','letter-spacing':mobile?1:.5},decor,'Waiting area');
+
+ // Jamie: a consistent illustrated character, always visible above the route.
+ patient=el('g',{'pointer-events':'none','aria-hidden':'true'},svg);
+ el('ellipse',{cx:2,cy:2,rx:17,ry:8,fill:'#704d2b24'},patient);
+ el('ellipse',{cx:0,cy:0,rx:20,ry:10,fill:'#c46b4320',stroke:'#b95c3e','stroke-width':1.5},patient);
+ el('path',{d:'M-7-20-7-3q0 4 5 3l3-20M3-20 4-3q1 4 6 2l-2-21',fill:'#354b42'},patient);
+ el('path',{d:'M-8-42Q-14-38-14-28L-10-21-7-26-7-18Q0-14 10-19L9-28 13-24 16-28Q13-39 8-42Z',fill:'#bf6443'},patient);
+ el('path',{d:'M-8-40Q0-36 8-40M1-36 1-20',fill:'none',stroke:'#e4a17d','stroke-width':1.2},patient);
+ el('path',{d:'M-12-29-9-24M13-29 14-26',fill:'none',stroke:'#dfac86','stroke-width':3,'stroke-linecap':'round'},patient);
+ el('path',{d:'M-3-45v6q4 4 7-1v-6',fill:'#d3a17c'},patient);
+ el('ellipse',{cx:1,cy:-49,rx:8,ry:10,fill:'#e2b18a'},patient);
+ el('path',{d:'M-7-47Q-12-61 0-61q13-1 10 13l-3-4-1-4q-4 6-13 5Z',fill:'#3b4335'},patient);
+ el('path',{d:'M9-29q10-6 12 4l-1 14q-7 4-13-1l1-13Z',fill:'#d5ba8e',stroke:'#a78b65','stroke-width':1},patient);
+ el('path',{d:'M11-28q0-9 6-7l2 7',fill:'none',stroke:'#957b56','stroke-width':1.5},patient);
+ patientPoint=stages[selected].point.slice();
+ positionPatient(patientPoint);
+ sync();
+}
+function positionPatient(point){
+ patientPoint=point.slice();
+ const p=P(...point,2),scale=mobile?1.32:1;
+ patient.setAttribute('transform',`translate(${p[0]} ${p[1]}) scale(${scale})`);
+}
+function routeBetween(from,to){
+ if(from===to)return [stages[to].point.slice()];
+ let pts=[];
+ if(to>from)for(let i=from;i<to;i++)pts.push(...segments[i]);
+ else for(let i=from-1;i>=to;i--)pts.push(...segments[i].slice().reverse());
+ return pts.filter((p,i)=>i===0||p[0]!==pts[i-1][0]||p[1]!==pts[i-1][1]);
+}
+function animatePatient(from,to,instant){
+ if(animation)cancelAnimationFrame(animation);
+ const route=routeBetween(from,to);
+ route.unshift(patientPoint.slice());
+ const target=stages[to].point;
+ if(instant||motionQuery.matches||from===to){
+  positionPatient(target);animation=null;return;
+ }
+ const lengths=[0];
+ for(let i=1;i<route.length;i++)lengths.push(lengths[i-1]+Math.hypot(route[i][0]-route[i-1][0],route[i][1]-route[i-1][1]));
+ const total=lengths[lengths.length-1];
+ if(!total){positionPatient(target);return}
+ const duration=Math.min(1700,650+total*.9);
+ let start;
+ function frame(now){
+  if(start===undefined)start=now;
+  const t=Math.min(1,(now-start)/duration);
+  const eased=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const distance=eased*total;
+  let j=1;
+  while(j<lengths.length-1&&lengths[j]<distance)j++;
+  const span=lengths[j]-lengths[j-1];
+  const k=span?(distance-lengths[j-1])/span:1;
+  positionPatient([route[j-1][0]+(route[j][0]-route[j-1][0])*k,route[j-1][1]+(route[j][1]-route[j-1][1])*k]);
+  if(t<1)animation=requestAnimationFrame(frame);
+  else{positionPatient(target);animation=null}
+ }
+ animation=requestAnimationFrame(frame);
+}
+function sync(){
+ const s=stages[selected];
+ document.getElementById('current-time').textContent=s.time;
+ document.getElementById('step-kicker').textContent=`MOMENT 0${selected+1} / 05`;
+ document.getElementById('current-title').textContent=s.title;
+ document.getElementById('current-location').textContent=s.location;
+ document.getElementById('current-description').textContent=s.detail;
+ document.getElementById('elapsed').textContent=s.minute;
+ document.getElementById('elapsed-announcement').textContent=`${s.minute} minutes elapsed.`;
+ document.getElementById('progress').setAttribute('aria-valuenow',s.minute);
+ document.getElementById('progress').setAttribute('aria-valuetext',`${s.minute} of 35 minutes elapsed`);
+ document.getElementById('progress-fill').style.width=(s.minute/35*100)+'%';
+ document.querySelectorAll('.timeline-step').forEach((b,i)=>{
+  b.setAttribute('aria-pressed',String(i===selected));
+  b.classList.toggle('is-past',i<selected);
+ });
+ svg.querySelectorAll('.room-target').forEach((g,i)=>{
+  g.classList.toggle('is-active',i===selected);
+  g.setAttribute('aria-pressed',String(i===selected));
+ });
+ stages.forEach((_,i)=>{
+  const floor=document.getElementById('floor-'+i);
+  if(floor)floor.setAttribute('fill',i===selected?'#efdbc4':floor.dataset.base);
+ });
+ const activeRoute=document.getElementById('active-route');
+ if(activeRoute)activeRoute.setAttribute('points',selected?points(segments[selected-1].map(p=>[...p,1.5])):'');
+ syncPlayback();
+}
+function syncPlayback(){
+ const end=selected===4;
+ document.getElementById('play-label').textContent=end?'Visit complete':playing?'Pause':'Play visit';
+ document.getElementById('play').disabled=end;
+ document.getElementById('play').setAttribute('aria-label',playing?'Pause visit':end?'Visit complete. Restart to play again.':'Play visit, one milestone every three seconds');
+ document.getElementById('play-icon').innerHTML=end?'<path d="m2 7 3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8"/>':playing?'<path d="M3 2h3v10H3zM9 2h3v10H9z" fill="currentColor"/>':'<path d="m4 2 8 5-8 5Z" fill="currentColor"/>';
+ document.getElementById('status-text').textContent=end?'Complete':playing?'Playing':'Paused';
+ document.getElementById('status').classList.toggle('playing',playing);
+}
+function stop(){
+ playing=false;
+ clearTimeout(timer);timer=null;
+ syncPlayback();
+}
+function select(index,instant=false){
+ const previous=selected;
+ selected=index;
+ if(selected===4)stop();
+ sync();
+ animatePatient(previous,selected,instant);
+}
+function selectManually(index){stop();select(index)}
+function schedule(){
+ clearTimeout(timer);
+ timer=setTimeout(()=>{
+  if(!playing)return;
+  select(Math.min(4,selected+1));
+  if(playing)schedule();
+ },3000);
+}
+document.getElementById('play').addEventListener('click',()=>{
+ if(playing){stop();return}
+ if(selected===4)return;
+ playing=true;syncPlayback();schedule();
+});
+document.getElementById('restart').addEventListener('click',()=>{stop();select(0)});
+const timelineButtons=Array.from(document.querySelectorAll('.timeline-step'));
+timelineButtons.forEach((b,i)=>{
+ b.addEventListener('click',()=>selectManually(i));
+ b.addEventListener('keydown',e=>{
+  let next;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')next=(i+1)%5;
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')next=(i+4)%5;
+  if(e.key==='Home')next=0;
+  if(e.key==='End')next=4;
+  if(next!==undefined){e.preventDefault();timelineButtons[next].focus();selectManually(next)}
+ });
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)stop()});
+mobileQuery.addEventListener('change',buildScene);
+motionQuery.addEventListener('change',()=>{
+ if(motionQuery.matches&&animation){
+  cancelAnimationFrame(animation);animation=null;positionPatient(stages[selected].point);
+ }
+});
+buildScene();
+})();
+</script>
+</body>
+</html>
