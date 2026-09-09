@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>After your visit — Jamie, May 10, 2027</title>
+<style>
+  :root{
+    --bg:#eef2f1;
+    --panel:#ffffff;
+    --panel-2:#f7faf9;
+    --ink:#12211f;
+    --ink-2:#41544f;
+    --ink-3:#6b7f7a;
+    --line:#dbe4e1;
+    --accent:#0d6a5f;
+    --accent-soft:#e3f1ee;
+    --accent-ink:#0a4f47;
+    --flag-bg:#fff6e6;
+    --flag-line:#f0d9a8;
+    --flag-ink:#7a5210;
+    --done:#3d7f4f;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(16,40,36,.06), 0 8px 24px -16px rgba(16,40,36,.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1614;
+      --panel:#16221f;
+      --panel-2:#1b2926;
+      --ink:#eaf2f0;
+      --ink-2:#b6c7c3;
+      --ink-3:#8ba09b;
+      --line:#2a3a36;
+      --accent:#63c8b8;
+      --accent-soft:#1b322e;
+      --accent-ink:#a9e5da;
+      --flag-bg:#2e2415;
+      --flag-line:#4d3d1e;
+      --flag-ink:#f0d49a;
+      --done:#7cc48f;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.8);
+    }
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{line-height:1.2;margin:0;letter-spacing:-.015em}
+  p{margin:0}
+  ul,ol{margin:0;padding:0;list-style:none}
+
+  .skip{
+    position:absolute;left:-9999px;top:0;z-index:50;
+    background:var(--accent);color:#fff;padding:.7rem 1rem;border-radius:0 0 10px 0;font-weight:600;
+  }
+  .skip:focus{left:0}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+
+  /* ---------- sticky bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb, var(--panel) 88%, transparent);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-in{display:flex;align-items:center;gap:16px;min-height:60px;flex-wrap:wrap}
+  .brandmark{
+    display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem;letter-spacing:-.01em;
+    margin-right:auto;
+  }
+  .pulse{
+    width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent-ink);
+    display:grid;place-items:center;font-size:.8rem;flex:none;border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);
+  }
+  .counter{
+    display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--ink-2);font-weight:600;
+  }
+  .bar{
+    width:120px;height:8px;border-radius:99px;background:var(--line);overflow:hidden;flex:none;
+  }
+  .bar > i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+
+  /* ---------- hero ---------- */
+  .hero{padding:44px 0 8px}
+  .eyebrow{
+    font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-ink);
+  }
+  @media (prefers-color-scheme: dark){.eyebrow{color:var(--accent)}}
+  .hero h1{font-size:clamp(1.85rem,5.4vw,2.85rem);margin:.5rem 0 .7rem;max-width:22ch}
+  .lede{font-size:1.06rem;color:var(--ink-2);max-width:60ch}
+  .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .fact{
+    background:var(--panel);border:1px solid var(--line);border-radius:99px;
+    padding:6px 14px;font-size:.85rem;color:var(--ink-2);
+  }
+  .fact b{color:var(--ink);font-weight:600}
+
+  /* ---------- appointment ---------- */
+  .appt{
+    margin:30px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .appt-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+  @media (max-width:700px){.appt-grid{grid-template-columns:1fr}}
+  .appt-main{padding:24px 26px}
+  .appt-side{padding:24px 26px;background:var(--panel-2);border-left:1px solid var(--line)}
+  @media (max-width:700px){.appt-side{border-left:0;border-top:1px solid var(--line)}}
+  .label{
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;font-weight:700;color:var(--ink-3);
+  }
+  .bigdate{font-size:clamp(1.5rem,4.4vw,2rem);font-weight:700;margin:.35rem 0 .1rem;letter-spacing:-.02em}
+  .bigtime{font-size:1.05rem;color:var(--accent-ink);font-weight:600}
+  @media (prefers-color-scheme: dark){.bigtime{color:var(--accent)}}
+  .place{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--ink-2);font-size:.95rem}
+  .place strong{color:var(--ink)}
+  .appt-side ul{margin-top:10px;display:grid;gap:10px}
+  .appt-side li{display:flex;gap:10px;font-size:.95rem;color:var(--ink-2);align-items:flex-start}
+  .appt-side li span{color:var(--accent);font-weight:700;flex:none;line-height:1.5}
+  .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  button{font:inherit;cursor:pointer}
+  .btn{
+    border:1px solid var(--line);background:var(--panel);color:var(--ink);
+    border-radius:10px;padding:.5rem .9rem;font-size:.86rem;font-weight:600;
+    transition:border-color .15s, background .15s, transform .05s;
+  }
+  .btn:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--accent-soft)}
+  .btn:active{transform:translateY(1px)}
+  .btn-ghost{background:transparent}
+  a.btn{text-decoration:none;display:inline-block}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+  /* ---------- plan ---------- */
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    margin:52px 0 6px;
+  }
+  .section-head h2{font-size:1.35rem}
+  .section-head p{font-size:.9rem;color:var(--ink-3);max-width:46ch}
+
+  .toolbar{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    margin:18px 0 10px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);font-size:.85rem;color:var(--ink-2);
+  }
+  .toolbar .grow{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-weight:600}
+  .switch input{position:absolute;opacity:0;width:1px;height:1px}
+  .track{width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;transition:background .18s;flex:none}
+  .track::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--panel);transition:transform .18s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .switch input:checked + .track{background:var(--accent)}
+  .switch input:checked + .track::after{transform:translateX(16px)}
+  .switch input:focus-visible + .track{outline:3px solid var(--accent);outline-offset:2px}
+
+  .tasks{display:grid;gap:14px;margin-top:14px}
+  .task{display:grid;grid-template-columns:118px minmax(0,1fr);gap:18px;position:relative}
+  @media (max-width:640px){.task{grid-template-columns:1fr;gap:8px}}
+
+  .rail{position:relative;padding-top:22px;text-align:right}
+  @media (max-width:640px){.rail{text-align:left;padding-top:0;padding-left:2px}}
+  .rail .due-label{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--ink-3)}
+  .rail .due-date{display:block;font-size:1.12rem;font-weight:700;letter-spacing:-.02em}
+  .rail .due-year{display:block;font-size:.78rem;color:var(--ink-3)}
+  @media (max-width:640px){
+    .rail .due-label,.rail .due-date,.rail .due-year{display:inline}
+    .rail .due-date{font-size:1rem;margin:0 .3rem}
+  }
+  .task::before{
+    content:"";position:absolute;left:118px;top:34px;bottom:-14px;width:1px;background:var(--line);
+    transform:translateX(9px);
+  }
+  .task:last-child::before{display:none}
+  @media (max-width:640px){.task::before{display:none}}
+  .knot{
+    position:absolute;left:118px;top:28px;width:11px;height:11px;border-radius:50%;
+    background:var(--panel);border:2px solid var(--accent);transform:translateX(4px);z-index:1;
+  }
+  @media (max-width:640px){.knot{display:none}}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px 16px;box-shadow:var(--shadow);
+    transition:border-color .2s, opacity .2s;
+  }
+  .card:hover{border-color:color-mix(in srgb,var(--accent) 30%,var(--line))}
+
+  .check{display:flex;gap:13px;align-items:flex-start;cursor:pointer}
+  .check input{position:absolute;opacity:0;width:1px;height:1px}
+  .box{
+    flex:none;width:24px;height:24px;border-radius:7px;border:2px solid color-mix(in srgb,var(--accent) 55%,var(--line));
+    background:var(--panel);margin-top:2px;position:relative;transition:background .15s,border-color .15s;
+  }
+  .box::after{
+    content:"";position:absolute;left:6px;top:2px;width:8px;height:13px;
+    border-right:2.5px solid #fff;border-bottom:2.5px solid #fff;
+    transform:rotate(40deg) scale(.4);opacity:0;transition:opacity .15s,transform .15s;
+  }
+  .check input:checked + .box{background:var(--done);border-color:var(--done)}
+  .check input:checked + .box::after{opacity:1;transform:rotate(40deg) scale(1)}
+  .check input:focus-visible + .box{outline:3px solid var(--accent);outline-offset:3px}
+  .t-title{font-size:1.08rem;font-weight:650;letter-spacing:-.01em}
+  .task.done .card{opacity:.62}
+  .task.done .t-title{text-decoration:line-through;text-decoration-thickness:1.5px;color:var(--ink-2)}
+
+  .t-body{margin:10px 0 0 37px;color:var(--ink-2);font-size:.96rem}
+  @media (max-width:640px){.t-body{margin-left:0}}
+  .t-extras{margin:12px 0 0 37px;display:grid;gap:10px}
+  @media (max-width:640px){.t-extras{margin-left:0}}
+
+  .flag{
+    display:flex;gap:10px;align-items:flex-start;
+    background:var(--flag-bg);border:1px solid var(--flag-line);border-radius:11px;
+    padding:10px 13px;font-size:.9rem;color:var(--flag-ink);
+  }
+  .flag .ico{
+    flex:none;width:19px;height:19px;border-radius:50%;background:var(--flag-ink);color:var(--flag-bg);
+    display:grid;place-items:center;font-size:.72rem;font-weight:800;margin-top:1px;
+  }
+  .flag b{font-weight:700}
+
+  .tags{display:flex;flex-wrap:wrap;gap:7px}
+  .tag{
+    font-size:.75rem;font-weight:650;letter-spacing:.01em;padding:3px 10px;border-radius:99px;
+    background:var(--accent-soft);color:var(--accent-ink);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);
+  }
+  @media (prefers-color-scheme: dark){.tag{color:var(--accent)}}
+
+  .allclear{
+    display:none;margin-top:16px;padding:14px 18px;border-radius:12px;
+    background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+    color:var(--accent-ink);font-size:.95rem;font-weight:600;
+  }
+  @media (prefers-color-scheme: dark){.allclear{color:var(--accent-ink)}}
+  body.all-done .allclear{display:block}
+  .tasks.hide-done .task.done{display:none}
+  .hidden-note{display:none;font-size:.85rem;color:var(--ink-3);margin-top:12px}
+  .tasks.hide-done + .hidden-note{display:block}
+
+  /* ---------- panels ---------- */
+  .panel{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;box-shadow:var(--shadow);margin-top:16px;
+  }
+  .panel h2{font-size:1.15rem;margin-bottom:4px}
+  .panel > p.sub{color:var(--ink-3);font-size:.9rem;margin-bottom:14px}
+  .rows{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .row{background:var(--panel);padding:13px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;align-items:baseline}
+  @media (max-width:560px){.row{grid-template-columns:1fr}}
+  .row .k{font-weight:600;font-size:.97rem}
+  .row .v{font-size:.88rem;color:var(--ink-2);text-align:right}
+  @media (max-width:560px){.row .v{text-align:left}}
+  .v.unknown{color:var(--flag-ink);font-weight:600}
+  .row .note{grid-column:1/-1;font-size:.87rem;color:var(--ink-3)}
+
+  footer{margin:46px 0 60px;padding-top:22px;border-top:1px solid var(--line);color:var(--ink-3);font-size:.85rem}
+  footer p + p{margin-top:8px}
+  noscript{display:block;font-size:.85rem;color:var(--flag-ink)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
+
+  @media print{
+    :root{--bg:#fff;--panel:#fff;--panel-2:#fff;--line:#bbb;--ink:#000;--ink-2:#222;--ink-3:#444;--shadow:none}
+    body{font-size:11.5pt}
+    .topbar,.btnrow,.toolbar,.skip,.hidden-note{display:none !important}
+    .tasks.hide-done .task.done{display:grid !important}
+    .task.done .card{opacity:1}
+    .hero{padding-top:0}
+    .card,.panel,.appt{break-inside:avoid;box-shadow:none}
+    .appt-grid{grid-template-columns:1fr 1fr}
+    a[href^="data:"]{display:none}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#plan">Skip to your checklist</a>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brandmark"><span class="pulse" aria-hidden="true">&#10003;</span> After your visit &middot; Jamie</div>
+    <div class="counter">
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" aria-label="To-dos completed"><i id="barFill"></i></div>
+      <span id="countText">4 to-dos</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Visit summary &amp; plan</p>
+    <h1>Here&rsquo;s what happens next, Jamie.</h1>
+    <p class="lede">Dr. Morgan asked you to take care of four things between now and your next appointment. They&rsquo;re listed below in the order they&rsquo;re due, with the two open questions flagged so you know what still needs confirming.</p>
+    <ul class="facts">
+      <li class="fact">Patient: <b>Jamie</b></li>
+      <li class="fact">Visit date: <b>May 10, 2027</b></li>
+      <li class="fact">Clinician: <b>Dr. Morgan</b></li>
+    </ul>
+  </section>
+
+  <section class="appt" aria-labelledby="apptHead">
+    <div class="appt-grid">
+      <div class="appt-main">
+        <p class="label" id="apptHead">Your next appointment</p>
+        <p class="bigdate">May 24, 2027</p>
+        <p class="bigtime">10:00 AM</p>
+        <p class="place">
+          <strong>Riverside Primary Care</strong><br>Suite 200<br>
+          <span style="color:var(--ink-3);font-size:.88rem">Street address and phone number were not included in these visit notes.</span>
+        </p>
+        <div class="btnrow">
+          <a class="btn" id="icsLink" download="appointment-2027-05-24.ics" href="#">Save appointment (.ics)</a>
+          <button class="btn btn-ghost" type="button" id="printBtn">Print this page</button>
+        </div>
+      </div>
+      <div class="appt-side">
+        <p class="label">Bring these on May&nbsp;24</p>
+        <ul>
+          <li><span aria-hidden="true">&#9679;</span> Your list of current medications and supplements</li>
+          <li><span aria-hidden="true">&#9679;</span> Your home blood-pressure log</li>
+        </ul>
+        <p style="margin-top:14px;font-size:.85rem;color:var(--ink-3)">No other items were listed in your visit notes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="plan" aria-labelledby="planHead">
+    <div class="section-head">
+      <h2 id="planHead">Your four to-dos</h2>
+      <p>Due dates come straight from your visit notes. This page doesn&rsquo;t know today&rsquo;s date, so it can&rsquo;t tell you what&rsquo;s coming up or overdue.</p>
+    </div>
+
+    <div class="toolbar">
+      <label class="switch">
+        <input type="checkbox" id="hideDone">
+        <span class="track" aria-hidden="true"></span>
+        <span>Hide what&rsquo;s finished</span>
+      </label>
+      <div class="grow">
+        <button class="btn btn-ghost" type="button" id="resetBtn">Clear all checkmarks</button>
+      </div>
+      <noscript>Checkmarks can&rsquo;t be saved without JavaScript &mdash; print the page and tick items off on paper.</noscript>
+    </div>
+
+    <ol class="tasks" id="taskList">
+
+      <li class="task" data-key="pt">
+        <span class="knot" aria-hidden="true"></span>
+        <div class="rail">
+          <span class="due-label">Due by</span>
+          <span class="due-date">May 14</span>
+          <span class="due-year">2027</span>
+        </div>
+        <div class="card">
+          <label class="check">
+            <input type="checkbox">
+            <span class="box" aria-hidden="true"></span>
+            <span class="t-title">Call to schedule the physical therapy referral</span>
+          </label>
+          <p class="t-body">Dr. Morgan referred you to physical therapy. Call to book the appointment by <strong>May 14, 2027</strong>.</p>
+          <div class="t-extras">
+            <p class="flag"><span class="ico" aria-hidden="true">?</span><span><b>Not yet known:</b> the physical therapy appointment date hasn&rsquo;t been set. It will be arranged when you call.</span></p>
+            <ul class="tags"><li class="tag">Earliest deadline</li><li class="tag">Open question</li></ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="task" data-key="labs">
+        <span class="knot" aria-hidden="true"></span>
+        <div class="rail">
+          <span class="due-label">Due by</span>
+          <span class="due-date">May 17</span>
+          <span class="due-year">2027</span>
+        </div>
+        <div class="card">
+          <label class="check">
+            <input type="checkbox">
+            <span class="box" aria-hidden="true"></span>
+            <span class="t-title">Arrange the ordered blood tests</span>
+          </label>
+          <p class="t-body">Dr. Morgan ordered blood tests. Arrange them by <strong>May 17, 2027</strong>.</p>
+          <div class="t-extras">
+            <p class="flag"><span class="ico" aria-hidden="true">?</span><span><b>Fasting instructions were not supplied.</b> Confirm with the clinic before the test.</span></p>
+            <ul class="tags"><li class="tag">Open question</li></ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="task" data-key="meds">
+        <span class="knot" aria-hidden="true"></span>
+        <div class="rail">
+          <span class="due-label">Due by</span>
+          <span class="due-date">May 23</span>
+          <span class="due-year">2027</span>
+        </div>
+        <div class="card">
+          <label class="check">
+            <input type="checkbox">
+            <span class="box" aria-hidden="true"></span>
+            <span class="t-title">Prepare a list of your current medications and supplements</span>
+          </label>
+          <p class="t-body">Have the list ready by <strong>May 23, 2027</strong> and bring it to your next appointment on May 24.</p>
+          <div class="t-extras">
+            <ul class="tags"><li class="tag">Bring on May 24</li></ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="task" data-key="bplog">
+        <span class="knot" aria-hidden="true"></span>
+        <div class="rail">
+          <span class="due-label">At the visit</span>
+          <span class="due-date">May 24</span>
+          <span class="due-year">2027</span>
+        </div>
+        <div class="card">
+          <label class="check">
+            <input type="checkbox">
+            <span class="box" aria-hidden="true"></span>
+            <span class="t-title">Bring your home blood-pressure log</span>
+          </label>
+          <p class="t-body">Take the log with you to the <strong>May 24, 2027, 10:00 AM</strong> appointment at Riverside Primary Care, Suite 200.</p>
+          <div class="t-extras">
+            <ul class="tags"><li class="tag">Bring on May 24</li></ul>
+          </div>
+        </div>
+      </li>
+
+    </ol>
+    <p class="hidden-note" id="hiddenNote"></p>
+    <p class="allclear" id="allClear">All four to-dos are checked off. Next up: your appointment on May 24, 2027 at 10:00 AM.</p>
+    <p class="sr" id="live" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="askHead">
+    <h2 id="askHead">Two things to confirm with the clinic</h2>
+    <p class="sub">These details were not recorded at your visit. The page can&rsquo;t fill them in for you.</p>
+    <div class="rows">
+      <div class="row">
+        <span class="k">Fasting before the blood tests</span>
+        <span class="v unknown">Not supplied</span>
+        <span class="note">Your visit notes say to confirm this with the clinic before the test. No fasting duration or instruction was recorded.</span>
+      </div>
+      <div class="row">
+        <span class="k">Physical therapy appointment date</span>
+        <span class="v unknown">Not yet set</span>
+        <span class="note">To be arranged when you call to schedule, by May 14, 2027.</span>
+      </div>
+      <div class="row">
+        <span class="k">Clinic phone number and street address</span>
+        <span class="v unknown">Not in these notes</span>
+        <span class="note">Use the contact details you already have for Riverside Primary Care.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="timeHead">
+    <h2 id="timeHead">Everything on one line</h2>
+    <p class="sub">The dates recorded from your May 10, 2027 visit, in order.</p>
+    <div class="rows">
+      <div class="row"><span class="k">May 10, 2027</span><span class="v">Visit with Dr. Morgan</span></div>
+      <div class="row"><span class="k">By May 14, 2027</span><span class="v">Call to schedule physical therapy</span></div>
+      <div class="row"><span class="k">By May 17, 2027</span><span class="v">Arrange the ordered blood tests</span></div>
+      <div class="row"><span class="k">By May 23, 2027</span><span class="v">Medication and supplement list ready</span></div>
+      <div class="row"><span class="k">May 24, 2027 &middot; 10:00 AM</span><span class="v">Appointment &mdash; Riverside Primary Care, Suite 200<br>Bring the medication list and the blood-pressure log</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>About this page.</strong> It repeats only what was recorded at Jamie&rsquo;s May 10, 2027 visit with Dr. Morgan. It contains no medical advice, and nothing has been added or assumed. Anything marked &ldquo;not supplied&rdquo; or &ldquo;not yet set&rdquo; is genuinely unknown here &mdash; check with the clinic.</p>
+    <p>Checkmarks are stored only in this browser on this device. Clearing your browser data removes them.</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORE_KEY = "jamie-after-visit-2027-05-10";
+  var list = document.getElementById("taskList");
+  var tasks = Array.prototype.slice.call(list.querySelectorAll(".task"));
+  var barFill = document.getElementById("barFill");
+  var bar = barFill.parentNode;
+  var countText = document.getElementById("countText");
+  var live = document.getElementById("live");
+  var hideDone = document.getElementById("hideDone");
+  var hiddenNote = document.getElementById("hiddenNote");
+  var total = tasks.length;
+
+  function load() {
+    try {
+      var raw = window.localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function save(state) {
+    try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  var state = load();
+  if (!state || typeof state !== "object") state = {};
+  var doneMap = state.done && typeof state.done === "object" ? state.done : {};
+
+  function render(announce) {
+    var count = 0, hiddenCount = 0;
+    tasks.forEach(function (task) {
+      var box = task.querySelector("input[type=checkbox]");
+      var isDone = !!box.checked;
+      task.classList.toggle("done", isDone);
+      if (isDone) { count++; if (hideDone.checked) hiddenCount++; }
+    });
+
+    var pct = total ? Math.round((count / total) * 100) : 0;
+    barFill.style.width = pct + "%";
+    bar.setAttribute("aria-valuenow", String(count));
+    countText.textContent = count === 0
+      ? total + " to-dos"
+      : count + " of " + total + " done";
+
+    document.body.classList.toggle("all-done", count === total);
+    list.classList.toggle("hide-done", !!hideDone.checked);
+    hiddenNote.textContent = hiddenCount === 1
+      ? "1 finished item is hidden. It will still appear if you print."
+      : hiddenCount + " finished items are hidden. They will still appear if you print.";
+
+    if (announce) {
+      live.textContent = count === total
+        ? "All " + total + " to-dos complete."
+        : count + " of " + total + " to-dos complete.";
+    }
+  }
+
+  tasks.forEach(function (task) {
+    var key = task.getAttribute("data-key");
+    var box = task.querySelector("input[type=checkbox]");
+    box.checked = doneMap[key] === true;
+    box.setAttribute("aria-describedby", "");
+    box.addEventListener("change", function () {
+      doneMap[key] = box.checked;
+      save({ done: doneMap, hideDone: hideDone.checked });
+      render(true);
+    });
+  });
+
+  hideDone.checked = state.hideDone === true;
+  hideDone.addEventListener("change", function () {
+    save({ done: doneMap, hideDone: hideDone.checked });
+    render(false);
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (!window.confirm("Clear all four checkmarks? The to-dos themselves stay on the page.")) return;
+    tasks.forEach(function (task) {
+      task.querySelector("input[type=checkbox]").checked = false;
+      doneMap[task.getAttribute("data-key")] = false;
+    });
+    save({ done: doneMap, hideDone: hideDone.checked });
+    render(true);
+  });
+
+  document.getElementById("printBtn").addEventListener("click", function () {
+    window.print();
+  });
+
+  /* Calendar file: built from the recorded visit facts only. The timestamp is
+     fixed to the visit date so the page never reads the current date. */
+  var ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//After your visit//Jamie 2027-05-10//EN",
+    "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT",
+    "UID:jamie-riverside-2027-05-24-1000",
+    "DTSTAMP:20270510T000000Z",
+    "DTSTART:20270524T100000",
+    "SUMMARY:Appointment with Dr. Morgan",
+    "LOCATION:Riverside Primary Care\\, Suite 200",
+    "DESCRIPTION:Bring your list of current medications and supplements\\, and your home blood-pressure log.",
+    "END:VEVENT",
+    "END:VCALENDAR",
+    ""
+  ].join("\r\n");
+  document.getElementById("icsLink").setAttribute(
+    "href",
+    "data:text/calendar;charset=utf-8," + encodeURIComponent(ics)
+  );
+
+  render(false);
+})();
+</script>
+</body>
+</html>

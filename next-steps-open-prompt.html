@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo 2 prompt</title>
+<style>body{margin:0;background:#faf7f0;color:#1d2321;font:16px/1.55 -apple-system,system-ui,Segoe UI,Helvetica,Arial,sans-serif}main{max-width:820px;margin:0 auto;padding:48px 24px 80px}h1{font-size:28px;margin:0 0 6px}p.sub{color:#5b6660;margin:0 0 24px}pre{white-space:pre-wrap;background:#fff;border:1px solid #e3ded2;border-radius:10px;padding:24px;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}a{color:#2a6f75}ul{color:#5b6660;font-size:14px;line-height:1.7}</style></head>
+<body><main><h1>Demo 2 · The brief</h1>
+<p class="sub">One request to each model. No system prompt, no tools, no iteration, vendor-default settings. The brief sets the facts and two hard constraints, then leaves the design to the model.</p>
+<pre>Jamie just finished a primary-care appointment and needs to understand what happens next. Build the web page that helps.
+
+Design it however you think is best. You decide the layout, the visual direction, the interactions, and what deserves emphasis. Show me the best version of this you can make.
+
+The visit:
+
+Patient: Jamie
+Visit date: May 10, 2027
+Clinician: Dr. Morgan
+Next appointment: May 24, 2027, at 10:00 AM
+Appointment location: Riverside Primary Care, Suite 200
+
+What the clinician asked Jamie to do:
+
+- Arrange the ordered blood tests by May 17. Fasting instructions were not supplied; confirm with the clinic before the test.
+- Call to schedule the physical therapy referral by May 14. The appointment date has not yet been set.
+- Prepare a list of current medications and supplements by May 23, and bring it to the next appointment.
+- Bring the home blood-pressure log to the May 24 appointment.
+
+Two hard constraints, because this is medical information:
+
+1. Use only the facts above. Do not add clinical advice, fasting durations, phone numbers, addresses, or dates that are not listed. Where something is unknown, the page should say so rather than fill it in.
+2. Return one complete, self-contained HTML file with embedded CSS and JavaScript, starting with &lt;!DOCTYPE html&gt;. No external libraries, fonts, images, or network requests, and no Markdown fences or commentary around it. It must work offline, and it must not use the current date.
+
+Everything else is your call.
+</pre>
+<p class="sub">Results: <a href="next-steps-open-local.html">local model output</a> · <a href="next-steps-open-api.html">hosted API output</a></p></main></body></html>

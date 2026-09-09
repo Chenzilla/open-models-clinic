@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A plain-language recap of Jamie's primary-care visit and the follow-ups to complete before the next appointment.">
+<title>What's next · Jamie's primary-care visit</title>
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root{
+    --paper:#f5f2ea;
+    --paper-2:#efe9dc;
+    --card:#fffdf8;
+    --ink:#25303a;
+    --ink-soft:#54606b;
+    --ink-mute:#8a929b;
+    --teal:#12796b;
+    --teal-deep:#0c544a;
+    --teal-wash:#e5f0ed;
+    --terracotta:#b25433;
+    --terracotta-wash:#f6e7df;
+    --amber:#a1710f;
+    --amber-wash:#f6edd4;
+    --line:#e3dccb;
+    --good:#2f8f5b;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--ink);
+    line-height:1.55;
+    background:
+      radial-gradient(1100px 620px at 108% -6%, rgba(18,121,107,.10), transparent 58%),
+      radial-gradient(880px 520px at -12% 108%, rgba(178,84,51,.09), transparent 60%),
+      var(--paper);
+    min-height:100vh;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:radial-gradient(rgba(37,48,58,.035) 1px, transparent 1px);
+    background-size:22px 22px;
+    pointer-events:none;
+    z-index:0;
+  }
+  .topbar{
+    height:5px;
+    background:linear-gradient(90deg,var(--teal-deep),var(--teal) 42%,var(--terracotta));
+    position:relative;z-index:2;
+  }
+
+  .page{
+    position:relative;z-index:1;
+    max-width:1080px;
+    margin:0 auto;
+    padding:clamp(28px,5vw,64px) clamp(18px,4vw,44px) 60px;
+  }
+
+  /* ---------- Masthead ---------- */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--teal-deep);margin:0 0 16px;
+  }
+  .eyebrow .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--terracotta);
+    box-shadow:0 0 0 4px rgba(178,84,51,.14);
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.3rem,6vw,4.1rem);
+    line-height:1.03;
+    letter-spacing:-.01em;
+    margin:0;
+    max-width:14ch;
+  }
+  h1 .soft{color:var(--teal-deep);}
+  .lede{
+    font-size:clamp(1.02rem,2.2vw,1.2rem);
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin:20px 0 0;
+  }
+  .meta{
+    display:flex;flex-wrap:wrap;gap:14px 34px;
+    margin-top:32px;padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .meta-item{display:flex;flex-direction:column;gap:3px;}
+  .meta-label{
+    font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-mute);font-weight:600;
+  }
+  .meta-value{
+    font-family:var(--serif);font-size:1.28rem;font-weight:600;color:var(--ink);
+  }
+
+  /* ---------- Layout ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:38px;
+    align-items:start;
+    margin-top:52px;
+  }
+  .rail{
+    position:sticky;top:22px;
+    display:flex;flex-direction:column;gap:18px;
+  }
+
+  /* Appointment card */
+  .appt{
+    background:linear-gradient(158deg,var(--teal-deep),var(--teal));
+    color:#eafaf5;
+    border-radius:22px;
+    padding:26px;
+    box-shadow:0 22px 44px -26px rgba(12,84,74,.75);
+    position:relative;overflow:hidden;
+  }
+  .appt::after{
+    content:"";position:absolute;right:-40px;top:-40px;
+    width:150px;height:150px;border-radius:50%;
+    background:rgba(255,255,255,.06);
+  }
+  .rail-eyebrow{
+    font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(234,250,245,.72);font-weight:600;margin:0;
+  }
+  .appt-date{
+    font-family:var(--serif);font-weight:600;font-size:2rem;line-height:1;
+    color:#fff;margin:14px 0 0;
+  }
+  .appt-time{
+    font-size:1.02rem;color:rgba(255,255,255,.92);margin:9px 0 0;font-weight:500;
+  }
+  .appt-loc{
+    font-size:.9rem;line-height:1.45;color:rgba(234,250,245,.82);
+    margin:16px 0 0;padding-top:14px;
+    border-top:1px solid rgba(255,255,255,.18);
+  }
+
+  /* Progress card */
+  .progress{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 14px 34px -30px rgba(37,48,58,.5);
+  }
+  .progress-inner{display:flex;align-items:center;gap:18px;}
+  .ring-wrap{position:relative;flex:0 0 auto;display:grid;place-items:center;width:104px;height:104px;}
+  .ring{width:104px;height:104px;}
+  .ring-bg{fill:none;stroke:var(--line);stroke-width:9;}
+  .ring-fg{
+    fill:none;stroke:var(--teal);stroke-width:9;stroke-linecap:round;
+    transform:rotate(-90deg);transform-origin:60px 60px;
+    transition:stroke-dashoffset .75s cubic-bezier(.4,0,.2,1),stroke .5s ease;
+  }
+  .ring-center{position:absolute;text-align:center;line-height:1;}
+  .ring-num{font-family:var(--serif);font-weight:600;font-size:1.9rem;color:var(--ink);}
+  .ring-of{display:block;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-top:4px;}
+  .progress-title{margin:0;font-weight:600;font-size:.98rem;}
+  .progress-hint{margin:6px 0 0;font-size:.82rem;color:var(--ink-mute);line-height:1.45;}
+
+  .rail-actions{display:flex;flex-direction:column;gap:10px;}
+  .act{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    font-family:var(--sans);font-weight:600;font-size:.92rem;
+    padding:13px 16px;border-radius:13px;cursor:pointer;
+    border:1px solid var(--line);background:var(--card);color:var(--ink);
+    transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease;
+  }
+  .act svg{width:17px;height:17px;}
+  .act:hover{transform:translateY(-1px);border-color:var(--teal);color:var(--teal-deep);}
+  .act:focus-visible{outline:3px solid rgba(18,121,107,.35);outline-offset:2px;}
+  .act-primary{background:var(--teal-deep);color:#fff;border-color:var(--teal-deep);}
+  .act-primary:hover{background:var(--teal);color:#fff;}
+  .act-ghost{background:transparent;}
+
+  /* ---------- Tasks ---------- */
+  .col-head{margin-bottom:6px;}
+  .col-head h2{
+    font-family:var(--serif);font-weight:600;font-size:1.7rem;margin:0;letter-spacing:-.01em;
+  }
+  .col-sub{margin:6px 0 26px;color:var(--ink-soft);font-size:.95rem;}
+
+  .timeline{position:relative;}
+  .timeline::before{
+    content:"";position:absolute;left:21px;top:14px;bottom:14px;width:2px;
+    background:var(--line);z-index:0;
+  }
+  .task{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:42px 1fr;gap:4px 20px;
+    padding:6px 0;
+  }
+  .node{
+    position:relative;
+    width:42px;height:42px;border-radius:50%;
+    display:grid;place-items:center;
+    background:var(--card);border:2px solid var(--line);
+    color:var(--ink-soft);font-family:var(--serif);font-weight:600;font-size:1.05rem;
+    cursor:pointer;padding:0;z-index:1;
+    transition:transform .16s ease,background .25s ease,border-color .25s ease,color .25s ease;
+  }
+  .node:hover{transform:scale(1.06);}
+  .node:focus-visible{outline:3px solid rgba(18,121,107,.35);outline-offset:3px;}
+  .node .num{transition:opacity .2s ease;}
+  .node .tick{
+    position:absolute;width:22px;height:22px;
+    stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:30;stroke-dashoffset:30;
+    transition:stroke-dashoffset .45s ease .12s,opacity .2s ease;opacity:0;
+  }
+  .task.is-done .node{background:var(--good);border-color:var(--good);color:#fff;}
+  .task.is-done .node .num{opacity:0;}
+  .task.is-done .node .tick{stroke-dashoffset:0;opacity:1;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px 22px;
+    margin:8px 0;
+    box-shadow:0 10px 26px -26px rgba(37,48,58,.55);
+    transition:opacity .3s ease,transform .16s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 18px 34px -28px rgba(37,48,58,.6);border-color:#d7cfbd;}
+  .card-top{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
+  .card-icon{
+    flex:0 0 auto;width:44px;height:44px;border-radius:12px;
+    display:grid;place-items:center;background:var(--teal-wash);color:var(--teal-deep);
+  }
+  .card-icon svg{width:24px;height:24px;}
+  .card-titles{flex:1 1 220px;min-width:0;}
+  .task-title{
+    font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.25;margin:0;
+    transition:color .25s ease;
+  }
+  .tag{
+    display:inline-block;margin-top:9px;
+    font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    padding:4px 9px;border-radius:6px;
+  }
+  .tag-start{background:var(--terracotta-wash);color:var(--terracotta);}
+  .tag-confirm{background:var(--amber-wash);color:var(--amber);}
+  .tag-visit{background:var(--teal-wash);color:var(--teal-deep);}
+  .pill{
+    flex:0 0 auto;margin-left:auto;
+    font-weight:600;font-size:12px;letter-spacing:.01em;white-space:nowrap;
+    padding:7px 13px;border-radius:999px;
+    background:var(--teal-wash);color:var(--teal-deep);
+    border:1px solid rgba(18,121,107,.18);
+  }
+  .task-note{
+    margin:15px 0 0;padding-top:14px;border-top:1px dashed var(--line);
+    color:var(--ink-soft);font-size:.95rem;line-height:1.5;
+  }
+  .task.is-done .card{opacity:.62;}
+  .task.is-done .task-title{text-decoration:line-through;text-decoration-color:var(--ink-mute);}
+
+  .all-done{
+    display:none;margin-top:24px;padding:16px 20px;border-radius:14px;
+    background:rgba(47,143,91,.10);border:1px solid rgba(47,143,91,.26);
+    color:#1f6b43;font-weight:600;font-size:1rem;
+  }
+  body.all-complete .all-done{display:block;}
+  body.all-complete .ring-fg{stroke:var(--good);}
+
+  /* ---------- Footer ---------- */
+  .foot{
+    margin-top:56px;padding-top:26px;border-top:1px solid var(--line);
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .foot-note{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 20px;color:var(--ink-soft);font-size:.92rem;line-height:1.55;max-width:70ch;
+  }
+  .foot-note strong{color:var(--ink);}
+  .foot-meta{font-size:.8rem;color:var(--ink-mute);line-height:1.55;}
+
+  /* ---------- Reveal animation ---------- */
+  .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1);}
+  .js .reveal.in{opacity:1;transform:none;}
+
+  @media (prefers-reduced-motion:reduce){
+    .js .reveal{opacity:1!important;transform:none!important;transition:none!important;}
+    *{scroll-behavior:auto!important;}
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr;gap:30px;}
+    .rail{position:static;}
+    .appt{order:-1;}
+  }
+  @media (max-width:520px){
+    .card-top{gap:12px;}
+    .pill{margin-left:0;}
+    .task{grid-template-columns:38px 1fr;gap:4px 16px;}
+    .node{width:38px;height:38px;}
+    .timeline::before{left:19px;}
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    body{background:#fff;}
+    body::before{display:none;}
+    .rail-actions,.progress-hint,.no-print{display:none!important;}
+    .js .reveal{opacity:1!important;transform:none!important;}
+    .appt{box-shadow:none;}
+    .card{box-shadow:none;break-inside:avoid;}
+    .task{break-inside:avoid;}
+    .layout{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <div class="page">
+
+    <header>
+      <p class="eyebrow"><span class="dot"></span> Primary-care follow-up</p>
+      <h1>Here's what happens next<span class="soft">,</span> Jamie.</h1>
+      <p class="lede">A plain-language recap of your visit, and the four follow-ups to complete before your next appointment on May 24, 2027. Tap the number on any step to mark it done.</p>
+
+      <div class="meta">
+        <div class="meta-item">
+          <span class="meta-label">Visit date</span>
+          <span class="meta-value">May 10, 2027</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Clinician</span>
+          <span class="meta-value">Dr. Morgan</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Visit type</span>
+          <span class="meta-value">Primary care</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="rail">
+        <section class="appt reveal" aria-labelledby="appt-h">
+          <p class="rail-eyebrow" id="appt-h">Your next appointment</p>
+          <p class="appt-date">May 24, 2027</p>
+          <p class="appt-time">10:00 AM</p>
+          <p class="appt-loc">Riverside Primary Care<br>Suite 200</p>
+        </section>
+
+        <section class="progress reveal" aria-label="Progress">
+          <div class="progress-inner">
+            <div class="ring-wrap">
+              <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+                <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"></circle>
+              </svg>
+              <div class="ring-center" aria-live="polite">
+                <span class="ring-num" id="ringNum">0</span>
+                <span class="ring-of">of 4</span>
+              </div>
+            </div>
+            <div>
+              <p class="progress-title">Prepared for your visit</p>
+              <p class="progress-hint no-print">Check a step to keep track. Your progress is saved on this device.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="rail-actions no-print">
+          <button class="act act-primary" id="printBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V4h12v5"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>
+            Print or save as PDF
+          </button>
+          <button class="act act-ghost" id="resetBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            Reset my checks
+          </button>
+        </div>
+      </aside>
+
+      <section class="main-col">
+        <div class="col-head">
+          <h2>To do before then</h2>
+          <p class="col-sub">Four follow-ups, ordered by their deadline — the soonest first.</p>
+        </div>
+
+        <ol class="timeline">
+          <li class="task reveal" data-index="0">
+            <button class="node" role="checkbox" aria-checked="false"
+              aria-label="Mark 'Schedule your physical therapy referral' as done">
+              <span class="num">1</span>
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"/></svg>
+            </button>
+            <div class="card">
+              <div class="card-top">
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5a2 2 0 0 1 2-2z"/></svg>
+                </span>
+                <div class="card-titles">
+                  <h3 class="task-title">Schedule your physical therapy referral</h3>
+                  <span class="tag tag-start">Start here</span>
+                </div>
+                <span class="pill">By May 14, 2027</span>
+              </div>
+              <p class="task-note">Call to make the appointment. The physical therapy date has not been set yet.</p>
+            </div>
+          </li>
+
+          <li class="task reveal" data-index="1">
+            <button class="node" role="checkbox" aria-checked="false"
+              aria-label="Mark 'Arrange your ordered blood tests' as done">
+              <span class="num">2</span>
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"/></svg>
+            </button>
+            <div class="card">
+              <div class="card-top">
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.4 6 10.5a6 6 0 0 1-12 0C6 9.4 12 3 12 3z"/></svg>
+                </span>
+                <div class="card-titles">
+                  <h3 class="task-title">Arrange your ordered blood tests</h3>
+                  <span class="tag tag-confirm">Confirm with the clinic</span>
+                </div>
+                <span class="pill">By May 17, 2027</span>
+              </div>
+              <p class="task-note">Fasting instructions were not supplied. Confirm whether to fast with the clinic before your test.</p>
+            </div>
+          </li>
+
+          <li class="task reveal" data-index="2">
+            <button class="node" role="checkbox" aria-checked="false"
+              aria-label="Mark 'Write down your medications and supplements' as done">
+              <span class="num">3</span>
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"/></svg>
+            </button>
+            <div class="card">
+              <div class="card-top">
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+                </span>
+                <div class="card-titles">
+                  <h3 class="task-title">Write down your medications and supplements</h3>
+                  <span class="tag tag-visit">Bring to your visit</span>
+                </div>
+                <span class="pill">By May 23, 2027</span>
+              </div>
+              <p class="task-note">Prepare a list of your current medications and supplements. Bring it to your May 24 appointment.</p>
+            </div>
+          </li>
+
+          <li class="task reveal" data-index="3">
+            <button class="node" role="checkbox" aria-checked="false"
+              aria-label="Mark 'Bring your home blood-pressure log' as done">
+              <span class="num">4</span>
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"/></svg>
+            </button>
+            <div class="card">
+              <div class="card-top">
+                <span class="card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4 15.6 4 10.4A4 4 0 0 1 12 8a4 4 0 0 1 8 2.4c0 5.2-8 10.1-8 10.1z"/></svg>
+                </span>
+                <div class="card-titles">
+                  <h3 class="task-title">Bring your home blood-pressure log</h3>
+                  <span class="tag tag-visit">Bring to your visit</span>
+                </div>
+                <span class="pill">Bring on May 24, 2027</span>
+              </div>
+              <p class="task-note">Have your home blood-pressure log ready to hand over at your May 24 appointment.</p>
+            </div>
+          </li>
+        </ol>
+
+        <p class="all-done" role="status">Everything on your list is set. See you on May 24, 2027.</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p class="foot-note">
+        Two details weren't settled at your visit and are left open on purpose: the
+        <strong>physical therapy appointment date</strong> (not yet set) and
+        <strong>fasting for the blood test</strong> (not supplied). When in doubt,
+        confirm these with the clinic.
+      </p>
+      <p class="foot-meta">
+        Prepared as a recap of your primary-care visit with Dr. Morgan on May 10, 2027.
+        This page summarizes your next steps; it is not medical advice.
+      </p>
+    </footer>
+
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  var tasks = Array.prototype.slice.call(document.querySelectorAll(".task"));
+  var N = tasks.length;
+  var ringFg = document.getElementById("ringFg");
+  var ringNum = document.getElementById("ringNum");
+  var R = 52;
+  var C = 2 * Math.PI * R;
+  var KEY = "jms-pc-followup-v1";
+
+  ringFg.style.strokeDasharray = C;
+  ringFg.style.strokeDashoffset = C;
+
+  function load(){
+    var out = new Array(N).fill(false);
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        if(Array.isArray(parsed)){
+          for(var i=0;i<N;i++){ out[i] = !!parsed[i]; }
+        }
+      }
+    }catch(e){}
+    return out;
+  }
+
+  var state = load();
+
+  function save(){
+    try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  function render(){
+    var done = 0;
+    for(var i=0;i<N;i++){
+      var on = !!state[i];
+      var li = tasks[i];
+      var node = li.querySelector(".node");
+      li.classList.toggle("is-done", on);
+      node.setAttribute("aria-checked", on ? "true" : "false");
+      if(on){ done++; }
+    }
+    var frac = done / N;
+    ringFg.style.strokeDashoffset = C * (1 - frac);
+    ringNum.textContent = String(done);
+    document.body.classList.toggle("all-complete", done === N);
+    save();
+  }
+
+  tasks.forEach(function(li){
+    var i = parseInt(li.getAttribute("data-index"), 10);
+    var node = li.querySelector(".node");
+    node.addEventListener("click", function(){
+      state[i] = !state[i];
+      render();
+    });
+  });
+
+  document.getElementById("printBtn").addEventListener("click", function(){
+    window.print();
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    for(var i=0;i<N;i++){ state[i] = false; }
+    render();
+  });
+
+  render();
+
+  /* Scroll reveal (skipped when reduced motion is preferred) */
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reveals = document.querySelectorAll(".reveal");
+  if(reduce || !("IntersectionObserver" in window)){
+    reveals.forEach(function(el){ el.classList.add("in"); });
+  }else{
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px -8% 0px"});
+    reveals.forEach(function(el, idx){
+      el.style.transitionDelay = (Math.min(idx,6) * 60) + "ms";
+      io.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>
