@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Next Steps</title>
+<style>
+  :root{
+    --accent:#2f7f75;
+    --accent-dark:#235b53;
+    --accent-soft:#e6f0ee;
+    --ink:#2b3836;
+    --muted:#697875;
+    --line:#e3e9e7;
+    --bg:#f4f8f6;
+    --card:#ffffff;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:480px;
+    margin:0 auto;
+    padding:28px 16px 60px;
+  }
+
+  /* Header */
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin:0 0 8px;
+  }
+  h1{font-size:1.75rem;line-height:1.15;margin:0 0 6px;}
+  .subhead{margin:0;color:var(--muted);font-size:.95rem;}
+
+  /* Cards */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px;
+    margin-top:20px;
+    box-shadow:0 1px 3px rgba(20,50,45,.04);
+  }
+  .card h2{
+    margin:0;font-size:.8rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+  }
+
+  /* Appointment */
+  .appt{
+    border-left:4px solid var(--accent);
+    background:linear-gradient(180deg,#eef5f3,#ffffff 60%);
+  }
+  .appt-date{
+    display:flex;align-items:center;flex-wrap:wrap;gap:12px;
+    margin-top:16px;
+  }
+  .appt-day{font-size:1.55rem;font-weight:700;letter-spacing:-.01em;}
+  .appt-time{
+    background:var(--accent-soft);color:var(--accent-dark);
+    padding:5px 14px;border-radius:999px;font-weight:600;font-size:.95rem;
+  }
+  .appt-meta{margin:20px 0 0;display:flex;flex-direction:column;gap:14px;}
+  .meta-row dt{
+    font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--muted);font-weight:700;margin-bottom:2px;
+  }
+  .meta-row dd{margin:0;font-weight:600;font-size:1rem;}
+
+  /* Actions */
+  .actions-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    gap:12px;flex-wrap:wrap;
+  }
+  .actions-head h2{font-size:1.05rem;color:var(--ink);text-transform:none;letter-spacing:0;}
+  .progress{color:var(--accent-dark);font-weight:700;font-size:.9rem;margin:0;}
+  .progress-bar{
+    height:8px;background:var(--accent-soft);border-radius:999px;
+    margin-top:14px;overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;width:0%;background:var(--accent);
+    border-radius:999px;transition:width .35s ease;
+  }
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 4px;}
+  .filter{
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:8px 15px;border-radius:999px;font-size:.85rem;font-weight:600;
+    cursor:pointer;font-family:inherit;transition:all .15s;
+  }
+  .filter:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .filter.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .filter:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  .action-list{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .action{
+    display:flex;align-items:flex-start;gap:14px;
+    border:1px solid var(--line);border-radius:14px;padding:15px 16px;
+    background:#fff;transition:background .18s,border-color .18s;
+  }
+  .action.done{background:var(--accent-soft);border-color:transparent;}
+  .check{position:relative;width:26px;height:26px;flex:0 0 auto;cursor:pointer;margin-top:1px;}
+  .check input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;}
+  .checkmark{
+    position:relative;display:block;width:26px;height:26px;
+    border:2px solid var(--muted);border-radius:8px;
+    transition:background .15s,border-color .15s;
+  }
+  .check input:checked + .checkmark{background:var(--accent);border-color:var(--accent);}
+  .check input:checked + .checkmark::after{
+    content:"";position:absolute;left:8px;top:3px;width:6px;height:11px;
+    border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);
+  }
+  .check input:focus-visible + .checkmark{outline:2px solid var(--accent);outline-offset:2px;}
+  .action-body{flex:1 1 auto;min-width:0;}
+  .action-title{font-size:1.02rem;font-weight:600;margin:0 0 6px;line-height:1.35;}
+  .action.done .action-title{text-decoration:line-through;color:var(--muted);}
+  .due{font-size:.78rem;color:var(--accent-dark);font-weight:600;margin-bottom:8px;}
+  .due-label{
+    text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    font-weight:700;margin-right:5px;
+  }
+  .details{margin:0;font-size:.9rem;color:var(--ink);opacity:.85;}
+  .empty{
+    text-align:center;color:var(--muted);font-style:italic;
+    padding:22px 0;margin:0;font-size:.95rem;
+  }
+
+  /* Questions */
+  .question-list{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .question{
+    display:flex;align-items:center;gap:12px;
+    background:#fbfdfc;border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;
+  }
+  .q-badge{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent-dark);font-weight:700;
+    font-size:.9rem;display:flex;align-items:center;justify-content:center;
+  }
+  .q-text{flex:1 1 auto;min-width:0;font-size:.95rem;}
+  .q-remove{
+    flex:0 0 auto;border:none;background:transparent;color:var(--muted);
+    font-size:1.25rem;line-height:1;cursor:pointer;width:32px;height:32px;
+    border-radius:8px;font-family:inherit;transition:background .15s,color .15s;
+  }
+  .q-remove:hover{background:var(--accent-soft);color:var(--accent-dark);}
+  .q-remove:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .q-empty{
+    color:var(--muted);font-style:italic;font-size:.9rem;
+    padding:6px 2px;margin:0;
+  }
+  .q-add{display:flex;gap:10px;margin-top:16px;}
+  .q-add input{
+    flex:1 1 auto;min-width:0;border:1px solid var(--line);border-radius:10px;
+    padding:11px 13px;font-size:.95rem;font-family:inherit;background:#fff;color:var(--ink);
+  }
+  .q-add input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+  .add-btn{
+    flex:0 0 auto;background:var(--accent);color:#fff;border:none;border-radius:10px;
+    padding:11px 18px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;
+    transition:background .15s;
+  }
+  .add-btn:hover{background:var(--accent-dark);}
+  .add-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  /* Footer */
+  .foot{margin-top:26px;text-align:center;}
+  .reset{
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:11px 24px;border-radius:10px;cursor:pointer;font-size:.9rem;
+    font-weight:600;font-family:inherit;transition:all .15s;
+  }
+  .reset:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .foot-note{margin:10px 0 0;font-size:.78rem;color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="eyebrow">After-visit plan</p>
+      <h1>My Next Steps</h1>
+      <p class="subhead">Prepared for Jamie &middot; May 10, 2027</p>
+    </header>
+
+    <section class="card appt" aria-label="Next appointment">
+      <h2>Your next appointment</h2>
+      <div class="appt-date">
+        <span class="appt-day">May 24, 2027</span>
+        <span class="appt-time">10:00 AM</span>
+      </div>
+      <dl class="appt-meta">
+        <div class="meta-row">
+          <dt>Clinician</dt>
+          <dd>Dr. Morgan</dd>
+        </div>
+        <div class="meta-row">
+          <dt>Location</dt>
+          <dd>Riverside Primary Care, Suite 200</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="card actions" aria-label="Action items">
+      <div class="actions-head">
+        <h2>Before your next visit</h2>
+        <p id="progress" class="progress" aria-live="polite">0 of 4 complete</p>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="filters" role="group" aria-label="Filter action items">
+        <button class="filter active" data-filter="all" aria-pressed="true">All</button>
+        <button class="filter" data-filter="todo" aria-pressed="false">To do</button>
+        <button class="filter" data-filter="done" aria-pressed="false">Completed</button>
+      </div>
+      <ul class="action-list" id="actionList"></ul>
+      <p class="empty" id="emptyMsg" hidden></p>
+    </section>
+
+    <section class="card questions" aria-label="Questions for my care team">
+      <h2>Questions for my care team</h2>
+      <ul class="question-list" id="questionList"></ul>
+      <form class="q-add" id="questionForm">
+        <input type="text" id="questionInput" placeholder="Add a question for your care team…" aria-label="Add a question">
+        <button type="submit" class="add-btn">Add</button>
+      </form>
+    </section>
+
+    <footer class="foot">
+      <button class="reset" id="resetBtn" type="button">Reset</button>
+      <p class="foot-note">Reset clears checkmarks and restores the starting question.</p>
+    </footer>
+  </div>
+
+<script>
+  (function(){
+    "use strict";
+
+    var STARTER_QUESTION = "Do I need to fast before the blood tests?";
+
+    var actionItems = [
+      {
+        title: "Arrange the ordered blood tests",
+        due: "May 17",
+        details: "Fasting instructions were not supplied; confirm with the clinic before the test.",
+        done: false
+      },
+      {
+        title: "Call to schedule the physical therapy referral",
+        due: "May 14",
+        details: "The appointment date has not yet been set.",
+        done: false
+      },
+      {
+        title: "Prepare a list of current medications and supplements",
+        due: "May 23",
+        details: "and bring it to the next appointment.",
+        done: false
+      },
+      {
+        title: "Bring the home blood-pressure log",
+        due: "May 24",
+        details: "to the May 24 appointment.",
+        done: false
+      }
+    ];
+
+    var currentFilter = "all";
+    var questions = [STARTER_QUESTION];
+
+    var actionListEl = document.getElementById("actionList");
+    var emptyMsgEl = document.getElementById("emptyMsg");
+    var progressEl = document.getElementById("progress");
+    var progressFillEl = document.getElementById("progressFill");
+    var questionListEl = document.getElementById("questionList");
+    var questionForm = document.getElementById("questionForm");
+    var questionInput = document.getElementById("questionInput");
+    var resetBtn = document.getElementById("resetBtn");
+    var filterButtons = document.querySelectorAll(".filter");
+
+    function renderActions(){
+      actionListEl.innerHTML = "";
+      var visible = actionItems.filter(function(it){
+        if(currentFilter === "todo") return !it.done;
+        if(currentFilter === "done") return it.done;
+        return true;
+      });
+
+      if(visible.length === 0){
+        emptyMsgEl.hidden = false;
+        emptyMsgEl.textContent = currentFilter === "done"
+          ? "Nothing completed yet."
+          : "All done for now.";
+      } else {
+        emptyMsgEl.hidden = true;
+        emptyMsgEl.textContent = "";
+      }
+
+      visible.forEach(function(it){
+        var li = document.createElement("li");
+        li.className = "action" + (it.done ? " done" : "");
+
+        var label = document.createElement("label");
+        label.className = "check";
+
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = it.done;
+        input.setAttribute("aria-label", "Mark complete: " + it.title);
+        input.addEventListener("change", function(){
+          it.done = input.checked;
+          renderActions();
+          renderProgress();
+        });
+
+        var mark = document.createElement("span");
+        mark.className = "checkmark";
+
+        label.appendChild(input);
+        label.appendChild(mark);
+
+        var body = document.createElement("div");
+        body.className = "action-body";
+
+        var title = document.createElement("h3");
+        title.className = "action-title";
+        title.textContent = it.title;
+
+        var due = document.createElement("div");
+        due.className = "due";
+        var dueLabel = document.createElement("span");
+        dueLabel.className = "due-label";
+        dueLabel.textContent = "Due";
+        due.appendChild(dueLabel);
+        due.appendChild(document.createTextNode(" " + it.due));
+
+        var details = document.createElement("p");
+        details.className = "details";
+        details.textContent = it.details;
+
+        body.appendChild(title);
+        body.appendChild(due);
+        body.appendChild(details);
+
+        li.appendChild(label);
+        li.appendChild(body);
+        actionListEl.appendChild(li);
+      });
+    }
+
+    function renderProgress(){
+      var done = actionItems.filter(function(it){ return it.done; }).length;
+      var total = actionItems.length;
+      progressEl.textContent = done + " of " + total + " complete";
+      progressFillEl.style.width = (total ? (done / total) * 100 : 0) + "%";
+    }
+
+    function setFilter(filter){
+      currentFilter = filter;
+      filterButtons.forEach(function(btn){
+        var active = btn.getAttribute("data-filter") === filter;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      renderActions();
+    }
+
+    function renderQuestions(){
+      questionListEl.innerHTML = "";
+      if(questions.length === 0){
+        var empty = document.createElement("li");
+        empty.className = "q-empty";
+        empty.textContent = "No questions yet — add one below.";
+        questionListEl.appendChild(empty);
+        return;
+      }
+      questions.forEach(function(q){
+        var li = document.createElement("li");
+        li.className = "question";
+
+        var badge = document.createElement("span");
+        badge.className = "q-badge";
+        badge.textContent = "?";
+
+        var text = document.createElement("span");
+        text.className = "q-text";
+        text.textContent = q;
+
+        var remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "q-remove";
+        remove.textContent = "\u2715";
+        remove.setAttribute("aria-label", "Remove question: " + q);
+        remove.addEventListener("click", function(){
+          var idx = questions.indexOf(q);
+          if(idx !== -1){
+            questions.splice(idx, 1);
+            renderQuestions();
+          }
+        });
+
+        li.appendChild(badge);
+        li.appendChild(text);
+        li.appendChild(remove);
+        questionListEl.appendChild(li);
+      });
+    }
+
+    questionForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var val = questionInput.value.trim();
+      if(val){
+        questions.push(val);
+        questionInput.value = "";
+        renderQuestions();
+      }
+    });
+
+    filterButtons.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        setFilter(btn.getAttribute("data-filter"));
+      });
+    });
+
+    resetBtn.addEventListener("click", function(){
+      actionItems.forEach(function(it){ it.done = false; });
+      questions = [STARTER_QUESTION];
+      setFilter("all");
+      renderProgress();
+      renderQuestions();
+    });
+
+    renderActions();
+    renderProgress();
+    renderQuestions();
+  })();
+</script>
+</body>
+</html>
